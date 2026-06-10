@@ -12,11 +12,12 @@ export const EnrollmentButton = ({
   onEcommerceCheckout,
 }: EnrollmentButtonTypes) => {
   const intl = useIntl();
-
+  const useEcommerceCheckout =
+        ecommerceCheckout && Object.entries(singlePaidMode).length > 0;
   return (
     <StatefulButton
       variant={Object.entries(singlePaidMode).length > 0 ? 'outline-primary' : 'primary'}
-      onClick={ecommerceCheckout ? onEcommerceCheckout : onEnroll}
+      onClick={useEcommerceCheckout ? onEcommerceCheckout : onEnroll}
       state={isEnrollmentPending ? 'pending' : 'default'}
       labels={{
         default: intl.formatMessage(messages.enrollNowBtn),
