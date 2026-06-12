@@ -77,6 +77,62 @@ describe('Course List Search Data Layer', () => {
       expect((formData as FormData).getAll('org')).toEqual(['openedx']);
     });
 
+    it('should preserve aggregation term keys while camelCasing course data fields', async () => {
+      const apiResponse = {
+        took: 1,
+        total: 30,
+        max_score: 1.0,
+        results: [
+          {
+            id: 'course-v1:Khyentse_Foundation+231+2024_04',
+            index: 'course_info',
+            type: '_doc',
+            data: {
+              id: 'course-v1:Khyentse_Foundation+231+2024_04',
+              course: 'course-v1:Khyentse_Foundation+231+2024_04',
+              org: 'Khyentse_Foundation',
+              image_url: '/image.jpg',
+              content: { display_name: 'Test course' },
+            },
+          },
+        ],
+        aggs: {
+          language: {
+            terms: { en: 30 },
+            total: 30,
+            other: 0,
+          },
+          modes: {
+            terms: { audit: 30 },
+            total: 30,
+            other: 0,
+          },
+          org: {
+            terms: {
+              Khyentse_Foundation: 8,
+              BDRC: 22,
+            },
+            total: 30,
+            other: 0,
+          },
+        },
+      };
+
+      const mockPost = jest.fn().mockResolvedValue({ data: apiResponse });
+      mockGetAuthenticatedHttpClient.mockReturnValue({ post: mockPost });
+
+      const result = await fetchCourseListSearch({});
+
+      expect(result.maxScore).toBe(1.0);
+      expect(result.results[0].data.imageUrl).toBe('/image.jpg');
+      expect(result.aggs.org.terms).toEqual({
+        Khyentse_Foundation: 8,
+        BDRC: 22,
+      });
+      expect(result.aggs.language.terms).toEqual({ en: 30 });
+      expect(result.aggs.modes.terms).toEqual({ audit: 30 });
+    });
+
     it('should handle API errors', async () => {
       const error = new Error('API Error');
       const mockPost = jest.fn().mockRejectedValue(error);

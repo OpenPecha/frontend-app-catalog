@@ -35,5 +35,12 @@ export const fetchCourseListSearch = async (params): Promise<CourseListSearchRes
   const { data } = await getAuthenticatedHttpClient()
     .post(getCourseListSearchUrl(), formData);
 
-  return camelCaseObject(data);
+  const rawAggs = data.aggs;
+  const camelized = camelCaseObject(data);
+
+  if (rawAggs) {
+    camelized.aggs = rawAggs;
+  }
+
+  return camelized;
 };
