@@ -14,14 +14,16 @@ describe('EnrolledStatus', () => {
     expect(screen.getByText(messages.statusMessageEnrolled.defaultMessage)).toBeInTheDocument();
   });
 
-  it('does not render courseware link button when showCoursewareLink is false', () => {
+  it('always renders view course link regardless of showCoursewareLink', () => {
     render(<EnrolledStatus {...defaultProps} />);
-    expect(screen.queryByRole('link', {
+
+    const viewCourseBtnLink = screen.getByRole('link', {
       name: messages.viewCourseBtn.defaultMessage,
-    })).not.toBeInTheDocument();
+    });
+    expect(viewCourseBtnLink).toHaveAttribute('href', expect.stringContaining(defaultProps.courseId));
   });
 
-  it('renders courseware link button when showCoursewareLink is true', () => {
+  it('renders view course link when showCoursewareLink is true', () => {
     render(<EnrolledStatus {...defaultProps} showCoursewareLink />);
 
     const viewCourseBtnLink = screen.getByRole('link', {
@@ -37,8 +39,8 @@ describe('EnrolledStatus', () => {
     expect(statusMessage).toHaveClass(`text-${STATUS_MESSAGE_VARIANTS.SUCCESS}-500`);
   });
 
-  it('renders both status message and button when showCoursewareLink is true', () => {
-    render(<EnrolledStatus {...defaultProps} showCoursewareLink />);
+  it('renders both status message and view course button', () => {
+    render(<EnrolledStatus {...defaultProps} />);
 
     expect(screen.getByText(messages.statusMessageEnrolled.defaultMessage)).toBeInTheDocument();
 
