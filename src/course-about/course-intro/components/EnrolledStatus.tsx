@@ -19,11 +19,9 @@ export const EnrolledStatus = ({ showCoursewareLink, courseId }: EnrolledStatusT
         variant={STATUS_MESSAGE_VARIANTS.SUCCESS}
         messageKey="statusMessageEnrolled"
       />
-      {showCoursewareLink && (
-        <Button as="a" href={getLearningHomePageUrl(courseId)}>
-          {intl.formatMessage(messages.viewCourseBtn)}
-        </Button>
-      )}
+      <Button as="a" href={getLearningHomePageUrl(courseId)}>
+        {intl.formatMessage(messages.viewCourseBtn)}
+      </Button>
     </Stack>
   );
 };
