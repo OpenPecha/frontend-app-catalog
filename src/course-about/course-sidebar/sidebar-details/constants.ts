@@ -1,7 +1,8 @@
 export const SIDEBAR_DETAIL_KEYS = {
-  COURSE_NUMBER: 'course-number',
   START_DATE: 'start-date',
   END_DATE: 'end-date',
   EFFORT: 'effort',
+  DURATION: 'duration',
   REQUIREMENTS: 'requirements',
+  STUDENTS_ENROLLED: 'students-enrolled',
 } as const;

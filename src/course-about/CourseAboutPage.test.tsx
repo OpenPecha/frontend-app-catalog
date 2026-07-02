@@ -198,9 +198,8 @@ describe('CourseAboutPage Integration Tests', () => {
       it('should render course sidebar with course details', async () => {
         const courseData = {
           ...mockCourseAboutResponse,
-          displayNumberWithDefault: 'CS101',
           effort: '6-8 hours per week',
-          requirements: 'Basic programming knowledge',
+          prerequisites: '<p>Basic programming knowledge</p>',
           coursePrice: '$99',
         };
 
@@ -210,9 +209,8 @@ describe('CourseAboutPage Integration Tests', () => {
 
         await waitFor(() => {
           const sidebar = screen.getByRole('complementary');
-          expect(within(sidebar).getByText(courseData.displayNumberWithDefault)).toBeInTheDocument();
           expect(within(sidebar).getByText(courseData.effort)).toBeInTheDocument();
-          expect(within(sidebar).getByText(courseData.requirements)).toBeInTheDocument();
+          expect(within(sidebar).getByText('Basic programming knowledge')).toBeInTheDocument();
           expect(within(sidebar).getByText(courseData.coursePrice)).toBeInTheDocument();
         });
       });
@@ -271,7 +269,7 @@ describe('CourseAboutPage Integration Tests', () => {
       it('should not display requirements when not provided', async () => {
         const courseData = {
           ...mockCourseAboutResponse,
-          requirements: null,
+          prerequisites: null,
         };
 
         mockFetchCourseAboutData.mockReturnValue(courseData);

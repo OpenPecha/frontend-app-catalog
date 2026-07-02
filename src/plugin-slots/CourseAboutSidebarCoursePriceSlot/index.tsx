@@ -1,5 +1,5 @@
 import { PluginSlot } from '@openedx/frontend-plugin-framework';
-import { MoneyFilled as MoneyFilledIcon } from '@openedx/paragon/icons';
+import { Sell as SellIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import type { CourseAboutData } from '@src/course-about/types';
@@ -19,7 +19,7 @@ const CourseAboutSidebarCoursePriceSlot = ({ coursePrice }: { coursePrice: Cours
     >
       <SidebarDetailsItem
         key="price"
-        icon={MoneyFilledIcon}
+        icon={SellIcon}
         label={intl.formatMessage(messages.price)}
         value={coursePrice}
       />

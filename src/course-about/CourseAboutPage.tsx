@@ -11,6 +11,11 @@ import CourseAboutIntroSlot from '@src/plugin-slots/CourseAboutIntroSlot';
 import CourseAboutCourseMediaSlot from '@src/plugin-slots/CourseAboutCourseMediaSlot';
 import CourseAboutOverviewSlot from '@src/plugin-slots/CourseAboutOverviewSlot';
 import CourseAboutSidebarSlot from '@src/plugin-slots/CourseAboutSidebarSlot';
+import { CourseDescription } from './course-description';
+import { CourseRequirements } from './course-requirements';
+import { LearningOutcomes } from './learning-outcomes';
+import { Instructors } from './instructors';
+import { AdditionalResources } from './additional-resources';
 import { useCourseAboutData } from './data/hooks';
 import messages from './messages';
 import { GRID_LAYOUT } from './layout';
@@ -59,7 +64,12 @@ const CourseAboutPage = () => {
                   overviewData={courseAboutData.overview}
                   courseId={courseId}
                 />
+                <CourseDescription description={courseAboutData.description} />
+                <CourseRequirements requirements={courseAboutData.requirements} />
+                <LearningOutcomes learningInfo={courseAboutData.learningInfo} />
+                <Instructors instructorInfo={courseAboutData.instructorInfo} />
                 <CourseAboutSidebarSlot courseAboutData={courseAboutData} />
+                <AdditionalResources ocwLinks={courseAboutData.ocwLinks} />
               </Stack>
             ) : (
               <Stack gap={4}>
@@ -68,6 +78,10 @@ const CourseAboutPage = () => {
                   overviewData={courseAboutData.overview}
                   courseId={courseId}
                 />
+                <CourseDescription description={courseAboutData.description} />
+                <CourseRequirements requirements={courseAboutData.requirements} />
+                <LearningOutcomes learningInfo={courseAboutData.learningInfo} />
+                <Instructors instructorInfo={courseAboutData.instructorInfo} />
               </Stack>
             )}
           </Layout.Element>
@@ -78,6 +92,7 @@ const CourseAboutPage = () => {
                 <CourseAboutCourseMediaSlot courseAboutData={courseAboutData} />
               </Layout.Element>
               <CourseAboutSidebarSlot courseAboutData={courseAboutData} />
+              <AdditionalResources ocwLinks={courseAboutData.ocwLinks} />
             </Stack>
             )}
           </Layout.Element>
