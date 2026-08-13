@@ -20,3 +20,6 @@ temp/babel-plugin-react-intl
 
 webpack.dev-tutor.config.js
 env.config.jsx
+
+frontend-component-footer/
+frontend-component-header/
