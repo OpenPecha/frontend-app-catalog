@@ -1,20 +1,15 @@
 import {
-  useEffect, useLayoutEffect, useRef, useState, type CSSProperties,
+  useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties,
 } from 'react';
 import { getConfig } from '@edx/frontend-platform';
-import { getHttpClient } from '@edx/frontend-platform/auth';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { usePartners } from '@src/data/partner-carousel/hooks';
+import type { Partner } from '@src/data/partner-carousel/types';
 import messages from './PartnerCarousel.messages';
 
 // Styles live in the brand package: brand-openedx/paragon/_catalog.scss,
 // pulled in globally via src/index.scss.
-
-interface Partner {
-  partner_name: string;
-  logo: string | null;
-  slug: string | null;
-}
 
 // How many logos fill the viewport at once.
 const LOGOS_PER_VIEW = 4;
@@ -61,7 +56,8 @@ const TITLE_ID = 'partner-carousel-title';
 
 const PartnerCarousel = () => {
   const intl = useIntl();
-  const [partners, setPartners] = useState<Partner[]>([]);
+  const { data } = usePartners();
+  const partners = useMemo(() => usableLogos(data ?? []), [data]);
   // Index of the leftmost visible logo. Grows/shrinks without bound — `mod`
   // maps it back onto the list, so there is no end to run into and therefore
   // never a "jump back to the start".
@@ -69,27 +65,6 @@ const PartnerCarousel = () => {
   // -1, 0 or 1: the slide currently playing. 0 means idle.
   const [shift, setShift] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    getHttpClient()
-      .get(`${getConfig().LMS_BASE_URL}/api/partners/homepage/`)
-      .then(({ data }) => {
-        if (isMounted) {
-          setPartners(usableLogos(Array.isArray(data) ? data : []));
-        }
-      })
-      .catch(() => {
-        if (isMounted) {
-          setPartners([]);
-        }
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   // Commit the slide once it has played out. A timer (rather than
   // `transitionend`) keeps this deterministic: the listener can silently never
@@ -170,7 +145,7 @@ const PartnerCarousel = () => {
                 <img
                   className="partner-carousel__logo"
                   src={partner.logo as string}
-                  alt={partner.partner_name}
+                  alt={partner.partnerName}
                 />
               );
 
