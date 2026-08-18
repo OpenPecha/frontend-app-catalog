@@ -11,8 +11,20 @@ import messages from './PartnerCarousel.messages';
 // Styles live in the brand package: brand-openedx/paragon/_catalog.scss,
 // pulled in globally via src/index.scss.
 
-// How many logos fill the viewport at once.
-const LOGOS_PER_VIEW = 4;
+// The desktop (widest) logos-per-view count. CSS overrides the actual
+// per-view count responsively (see _catalog.scss's --pc-per-view
+// breakpoints); this constant only sizes the render-slot buffer, which is
+// fine to size for the widest case — a buffer built for 4 still works when
+// only 1 is visible, it just carries slots that go unused.
+const MAX_LOGOS_PER_VIEW = 4;
+
+// The narrowest (mobile, ≤460px) logos-per-view count from the same CSS
+// breakpoints. Used as the threshold for whether to scroll at all: checking
+// against MAX_LOGOS_PER_VIEW instead would decide "no scroll needed" using
+// the desktop count and never revisit it, so on a narrow screen — where CSS
+// shows only 1 at a time — any partner count above 1 but at or below 4 would
+// overflow with no arrows to reach the rest.
+const MIN_LOGOS_PER_VIEW = 1;
 
 // One extra logo rendered off-screen on each side, so there is something to
 // slide in from either direction. Never visible at rest.
@@ -100,10 +112,11 @@ const PartnerCarousel = () => {
     return null;
   }
 
-  // With few enough partners to fit on screen there is nothing to scroll, so
-  // show them as a plain row rather than repeating logos to pad the track.
-  const canScroll = partners.length > LOGOS_PER_VIEW;
-  const windowSize = canScroll ? LOGOS_PER_VIEW + BUFFER * 2 : partners.length;
+  // With few enough partners to fit on screen at every breakpoint there is
+  // nothing to scroll, so show them as a plain row rather than repeating
+  // logos to pad the track.
+  const canScroll = partners.length > MIN_LOGOS_PER_VIEW;
+  const windowSize = canScroll ? MAX_LOGOS_PER_VIEW + BUFFER * 2 : partners.length;
   const offsetSteps = canScroll ? BUFFER + shift : 0;
 
   const slots = Array.from({ length: windowSize }, (_unused, i) => {
@@ -120,9 +133,12 @@ const PartnerCarousel = () => {
       aria-roledescription="carousel"
       aria-labelledby={TITLE_ID}
       style={{
-        // Drive all sizing from CSS so no element ever needs to be measured
-        // in JS — that also makes the layout correct on resize for free.
-        '--pc-per-view': `${LOGOS_PER_VIEW}`,
+        // Drive sizing from CSS so no element ever needs to be measured in
+        // JS. --pc-per-view is deliberately NOT set here: it needs to change
+        // at the brand package's breakpoints (see _catalog.scss), and an
+        // inline style always wins over a media-query-scoped rule regardless
+        // of specificity, so setting it here would make it impossible for
+        // CSS to ever override.
         '--pc-window': `${windowSize}`,
         '--pc-duration': `${SLIDE_MS}ms`,
       } as CSSProperties}
