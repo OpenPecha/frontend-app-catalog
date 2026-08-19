@@ -7,18 +7,23 @@ import {
 import { useHeroCourses } from '@src/data/hero-courses/hooks';
 import HomeHeroCards from './HomeHeroCards';
 
+import messages from './messages';
+
 jest.mock('@src/data/hero-courses/hooks', () => ({
   useHeroCourses: jest.fn(),
 }));
 
 const mockUseHeroCourses = useHeroCourses as jest.Mock;
 
+// Both default to isNew: false so the badge stays out of the way of every test
+// that is not about it.
 const courseA = {
   courseId: 'course-v1:Org+A+2026',
   title: 'Buddhist Logic and Epistemology',
   imageUrl: 'https://lms.example.com/asset/a.jpg',
   providerName: 'Khyentse Foundation',
   providerLogo: 'https://lms.example.com/logo/kf.png',
+  isNew: false,
 };
 
 const courseB = {
@@ -27,6 +32,7 @@ const courseB = {
   imageUrl: null,
   providerName: 'Kagyu Yeshe',
   providerLogo: null,
+  isNew: false,
 };
 
 const renderSignedIn = () => render(
@@ -172,6 +178,42 @@ describe('<HomeHeroCards />', () => {
     // "Kagyu Yeshe" -> "KY"
     expect(screen.getByText('KY')).toBeInTheDocument();
     expect(screen.queryByAltText(`${courseB.providerName} logo`)).not.toBeInTheDocument();
+  });
+
+  it('flags a course the staff marked as new', () => {
+    mockUseHeroCourses.mockReturnValue({
+      data: [{ ...courseA, isNew: true }],
+      isLoading: false,
+      isError: false,
+    });
+
+    render(<HomeHeroCards />);
+
+    expect(screen.getByText(messages.newCourse.defaultMessage)).toBeInTheDocument();
+  });
+
+  it('wraps the ribbon band in its clipping window', () => {
+    mockUseHeroCourses.mockReturnValue({
+      data: [{ ...courseA, isNew: true }],
+      isLoading: false,
+      isError: false,
+    });
+
+    render(<HomeHeroCards />);
+
+    // Load-bearing nesting: the outer element is the square window whose
+    // `overflow: hidden` trims the rotated band to the corner. Flatten these
+    // into one element and the band juts out across the whole card.
+    expect(screen.getByText(messages.newCourse.defaultMessage).parentElement)
+      .toHaveClass('home-hero__card-ribbon');
+  });
+
+  it('leaves the flag off a course that is not new', () => {
+    mockUseHeroCourses.mockReturnValue({ data: [courseA], isLoading: false, isError: false });
+
+    render(<HomeHeroCards />);
+
+    expect(screen.queryByText(messages.newCourse.defaultMessage)).not.toBeInTheDocument();
   });
 
   it('links a signed-out visitor to the in-app about page', () => {

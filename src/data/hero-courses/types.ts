@@ -1,10 +1,10 @@
 /**
  * A course shown on one of the homepage hero's floating cards.
  *
- * Structurally identical to `HomepageCategoryCourse` today, because both come
- * from the same backend serializer. Kept as its own type rather than shared:
- * the two endpoints answer different questions — one lists a category, the
- * other answers "what should this visitor see" — and are free to diverge.
+ * A near-twin of `HomepageCategoryCourse`, since the hero endpoint's serializer
+ * extends the one the category tabs use — but no longer identical to it, and
+ * kept separate for exactly that reason: the two endpoints answer different
+ * questions, so only the hero carries the fields the hero renders.
  */
 export interface HeroCourse {
   courseId: string;
@@ -13,4 +13,15 @@ export interface HeroCourse {
   /** Institution offering the course: its center, or its partner. */
   providerName: string | null;
   providerLogo: string | null;
+  /**
+   * Whether to mark the card as a recently added course. Staff set this as a
+   * date on the backend, which sends false once the date has passed — the
+   * comparison is deliberately not made here, so the badge cannot be thrown off
+   * by a visitor's system clock.
+   *
+   * Required rather than optional because the endpoint always sends it. The
+   * render guard treats a missing value as false anyway, so an MFE deployed
+   * ahead of the plugin degrades to no badge rather than breaking.
+   */
+  isNew: boolean;
 }

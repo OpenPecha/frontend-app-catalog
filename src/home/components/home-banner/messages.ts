@@ -31,6 +31,11 @@ const messages = defineMessages({
     defaultMessage: 'Featured courses',
     description: 'Accessible label for the pair of course cards beside the home page heading.',
   },
+  newCourse: {
+    id: 'catalog.home-page.new-course',
+    defaultMessage: 'New course',
+    description: 'Badge on a home page hero card marking a recently added course.',
+  },
   providerLogoAlt: {
     id: 'catalog.home-page.provider-logo-alt',
     defaultMessage: '{providerName} logo',

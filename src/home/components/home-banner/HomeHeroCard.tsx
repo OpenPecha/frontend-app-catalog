@@ -44,7 +44,7 @@ const getProviderInitials = (providerName: string) => providerName
 const HomeHeroCard = ({ course, isFront, isSignedIn }: HomeHeroCardProps) => {
   const intl = useIntl();
   const {
-    courseId, title, imageUrl, providerName, providerLogo,
+    courseId, title, imageUrl, providerName, providerLogo, isNew,
   } = course;
 
   const aboutPath = ROUTES.COURSE_ABOUT.replace(':courseId', courseId);
@@ -52,6 +52,20 @@ const HomeHeroCard = ({ course, isFront, isSignedIn }: HomeHeroCardProps) => {
 
   const body = (
     <>
+      {/* Left readable, unlike the provider initials below: those repeat the
+          provider name rendered underneath, whereas nothing else on the card
+          says the course is new. Sitting first in the card's text, the link
+          announces "New course, <provider>, <title>".
+
+          Two nested spans, not one: the outer is a square window that clips the
+          inner band's ends to the corner, which is what lets the band sit at 45
+          degrees without a huge overhang. Spans rather than divs because the
+          whole card is an anchor. */}
+      {isNew && (
+        <span className="home-hero__card-ribbon">
+          <span>{intl.formatMessage(messages.newCourse)}</span>
+        </span>
+      )}
       <span className="home-hero__card-image">
         {/* Decorative: the title beneath already names the course, so alt text
             here would only repeat it to a screen reader. */}
