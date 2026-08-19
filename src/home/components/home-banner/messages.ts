@@ -18,7 +18,7 @@ const messages = defineMessages({
   },
   welcomeBack: {
     id: 'catalog.home-page.welcome-back',
-    defaultMessage: 'Welcome back, <accent>{username}</accent>',
+    defaultMessage: 'Welcome back, <accent>{name}</accent>',
     description: 'Main home page heading for a signed-in learner. The accent tag styles their name.',
   },
   searchPlaceholder: {

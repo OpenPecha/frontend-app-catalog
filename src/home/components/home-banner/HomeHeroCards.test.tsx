@@ -1,7 +1,9 @@
 import { AppContext } from '@edx/frontend-platform/react';
 import { getConfig } from '@edx/frontend-platform';
 
-import { render, screen, cleanup } from '@src/setupTest';
+import {
+  render, screen, cleanup, act, userEvent,
+} from '@src/setupTest';
 import { useHeroCourses } from '@src/data/hero-courses/hooks';
 import HomeHeroCards from './HomeHeroCards';
 
@@ -48,6 +50,64 @@ describe('<HomeHeroCards />', () => {
     expect(screen.getByText(courseA.title)).toBeInTheDocument();
     expect(screen.getByText(courseB.title)).toBeInTheDocument();
     expect(screen.getAllByRole('link')).toHaveLength(2);
+  });
+
+  describe('the front/back swap', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+      mockUseHeroCourses.mockReturnValue({ data: [courseA, courseB], isLoading: false, isError: false });
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('trades the cards places on a timer', () => {
+      render(<HomeHeroCards />);
+
+      const [first] = screen.getAllByRole('link');
+      expect(first).toHaveClass('home-hero__card--front');
+
+      act(() => { jest.advanceTimersByTime(3000); });
+
+      expect(screen.getAllByRole('link')[0]).toHaveClass('home-hero__card--back');
+    });
+
+    it('holds the cards still while one is hovered', async () => {
+      render(<HomeHeroCards />);
+
+      const [first] = screen.getAllByRole('link');
+      expect(first).toHaveClass('home-hero__card--front');
+
+      await userEvent.hover(screen.getByTestId('home-hero-cards'), { advanceTimers: jest.advanceTimersByTime });
+      act(() => { jest.advanceTimersByTime(9000); });
+
+      // Still leading: a card being read must not slide behind the other.
+      expect(screen.getAllByRole('link')[0]).toHaveClass('home-hero__card--front');
+    });
+
+    it('resumes once the cursor leaves', async () => {
+      render(<HomeHeroCards />);
+      const group = screen.getByTestId('home-hero-cards');
+
+      await userEvent.hover(group, { advanceTimers: jest.advanceTimersByTime });
+      act(() => { jest.advanceTimersByTime(9000); });
+      expect(screen.getAllByRole('link')[0]).toHaveClass('home-hero__card--front');
+
+      await userEvent.unhover(group, { advanceTimers: jest.advanceTimersByTime });
+      act(() => { jest.advanceTimersByTime(3000); });
+
+      expect(screen.getAllByRole('link')[0]).toHaveClass('home-hero__card--back');
+    });
+
+    it('holds the cards still while one has keyboard focus', () => {
+      render(<HomeHeroCards />);
+
+      act(() => { screen.getAllByRole('link')[0].focus(); });
+      act(() => { jest.advanceTimersByTime(9000); });
+
+      expect(screen.getAllByRole('link')[0]).toHaveClass('home-hero__card--front');
+    });
   });
 
   it('renders a single card without crashing', () => {

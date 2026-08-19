@@ -20,6 +20,7 @@ const HomeHeroCards = () => {
   const { authenticatedUser } = useContext(AppContext) as AppContextTypes;
   const { data } = useHeroCourses();
   const [isSwapped, setIsSwapped] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const prefersReducedMotion = useMediaQuery({ query: '(prefers-reduced-motion: reduce)' });
   const courses = (data ?? []).slice(0, HERO_CARD_COUNT);
@@ -27,7 +28,10 @@ const HomeHeroCards = () => {
   const canSwap = courses.length === HERO_CARD_COUNT && !prefersReducedMotion;
 
   useEffect(() => {
-    if (!canSwap) {
+    // Held while someone is reading or aiming at a card: the CSS hover pauses
+    // the bob, but only clearing the timer stops the pair from trading places,
+    // which would otherwise slide the card being read behind the other one.
+    if (!canSwap || isPaused) {
       return undefined;
     }
 
@@ -37,7 +41,7 @@ const HomeHeroCards = () => {
     );
 
     return () => clearInterval(timer);
-  }, [canSwap]);
+  }, [canSwap, isPaused]);
 
   // The hero is chrome around a working search box, so it stays quiet when it
   // has nothing to show: no skeleton while loading, and no error state if the
@@ -52,6 +56,13 @@ const HomeHeroCards = () => {
       role="group"
       aria-label={intl.formatMessage(messages.heroCourses)}
       data-testid="home-hero-cards"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      // Focus gets the same hold as hover, so a keyboard user tabbing onto a
+      // card isn't left aiming at a target that reshuffles under them. React's
+      // onFocus/onBlur bubble, so these fire for the cards inside too.
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
     >
       {courses.map((course, index) => (
         <HomeHeroCard
