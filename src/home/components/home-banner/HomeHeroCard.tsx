@@ -11,16 +11,10 @@ interface HomeHeroCardProps {
   /** Whether this card sits in front of the other in the stack. */
   isFront: boolean;
   /**
-   * Whether anyone is signed in, which decides where the card leads: a learner
-   * is dropped back into the courseware to carry on, while a signed-out visitor
-   * gets the about page to read up on the course first.
-   *
-   * Auth state rather than per-card enrollment, because the endpoint returns one
-   * flat list and does not say which cards came from enrollments and which are
-   * curated fillers. The only case that misses is a signed-in visitor with fewer
-   * than two enrollments, whose curated filler card points at courseware they
-   * have not joined — the LMS answers that by redirecting them to the about page,
-   * which is where the link would have sent them anyway.
+   * Whether anyone is signed in: a learner goes to the courseware, a
+   * signed-out visitor to the about page. Based on auth state rather than
+   * per-card enrollment, since the endpoint doesn't say which cards came from
+   * enrollments vs. curated picks.
    */
   isSignedIn: boolean;
 }
@@ -52,15 +46,9 @@ const HomeHeroCard = ({ course, isFront, isSignedIn }: HomeHeroCardProps) => {
 
   const body = (
     <>
-      {/* Left readable, unlike the provider initials below: those repeat the
-          provider name rendered underneath, whereas nothing else on the card
-          says the course is new. Sitting first in the card's text, the link
-          announces "New course, <provider>, <title>".
-
-          Two nested spans, not one: the outer is a square window that clips the
-          inner band's ends to the corner, which is what lets the band sit at 45
-          degrees without a huge overhang. Spans rather than divs because the
-          whole card is an anchor. */}
+      {/* Nested spans: the outer clips the inner band's ends to the corner,
+          letting it sit at 45 degrees without a big overhang. Left readable by
+          screen readers — nothing else on the card says the course is new. */}
       {isNew && (
         <span className="home-hero__card-ribbon">
           <span>{intl.formatMessage(messages.newCourse)}</span>

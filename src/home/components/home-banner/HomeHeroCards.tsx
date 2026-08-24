@@ -28,9 +28,8 @@ const HomeHeroCards = () => {
   const canSwap = courses.length === HERO_CARD_COUNT && !prefersReducedMotion;
 
   useEffect(() => {
-    // Held while someone is reading or aiming at a card: the CSS hover pauses
-    // the bob, but only clearing the timer stops the pair from trading places,
-    // which would otherwise slide the card being read behind the other one.
+    // Paused while a card is hovered or focused, so it doesn't swap out from
+    // under someone reading it.
     if (!canSwap || isPaused) {
       return undefined;
     }
@@ -43,9 +42,8 @@ const HomeHeroCards = () => {
     return () => clearInterval(timer);
   }, [canSwap, isPaused]);
 
-  // The hero is chrome around a working search box, so it stays quiet when it
-  // has nothing to show: no skeleton while loading, and no error state if the
-  // request fails. Either would draw the eye to a decorative corner of the page.
+  // No skeleton or error state — this is decorative, so it just stays hidden
+  // when it has nothing to show.
   if (!courses.length) {
     return null;
   }
@@ -58,9 +56,7 @@ const HomeHeroCards = () => {
       data-testid="home-hero-cards"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      // Focus gets the same hold as hover, so a keyboard user tabbing onto a
-      // card isn't left aiming at a target that reshuffles under them. React's
-      // onFocus/onBlur bubble, so these fire for the cards inside too.
+      // Also pause on focus, for keyboard users. Bubbles from the cards inside.
       onFocus={() => setIsPaused(true)}
       onBlur={() => setIsPaused(false)}
     >

@@ -10,19 +10,16 @@ import type { HeroCourse } from './types';
 /**
  * Loads the courses for the homepage hero cards.
  *
- * Reads the user from context rather than calling `getAuthenticatedUser()`, so
- * the hook re-runs once the user resolves — a plain module call would not
- * re-render and the hero would stay stuck on the signed-out response.
+ * Reads the user from context, not `getAuthenticatedUser()`, so the hook
+ * re-renders once the user resolves instead of staying on a stale response.
  */
 export const useHeroCourses = () => {
   const { authenticatedUser } = useContext(AppContext) as AppContextTypes;
   const isAuthenticated = Boolean(authenticatedUser);
 
   return useQuery<HeroCourse[], Error>({
-    // The username belongs in the key because this response is per-user:
-    // keyed on 'heroCourses' alone, the pair cached for a signed-out visitor
-    // would be reused after they sign in, and one learner's courses could be
-    // served to the next user of a shared browser.
+    // Username in the key: the response is per-user, so a shared key would
+    // leak a cached response across sign-in state or between users.
     queryKey: ['heroCourses', authenticatedUser?.username ?? null],
     queryFn: () => fetchHeroCourses(isAuthenticated),
     staleTime: HERO_COURSES_STALE_TIME_MS,

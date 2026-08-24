@@ -9,9 +9,7 @@ export const HERO_CARD_COUNT = 2;
 export const HERO_CARD_SWAP_INTERVAL_MS = 3000;
 
 /**
- * A visitor's enrollments only change when they enroll, so hold the fetched
- * pair long enough to survive remounts and window refocus. Without this the
- * app-wide query defaults (`staleTime: 0`, `refetchOnWindowFocus: true`) would
- * refetch this per-user endpoint every time the tab regains focus.
+ * Avoids refetching on every window focus — the app's query defaults would
+ * otherwise do that, and this data rarely changes.
  */
 export const HERO_COURSES_STALE_TIME_MS = 5 * 60 * 1000;

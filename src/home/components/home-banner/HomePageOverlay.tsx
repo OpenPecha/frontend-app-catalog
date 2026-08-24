@@ -29,8 +29,6 @@ const HomePageOverlay = () => {
   const { SITE_NAME } = getConfig();
   const { authenticatedUser } = useContext(AppContext) as AppContextTypes;
 
-  // See getGreetingName for how a first name is derived from the single full
-  // name the platform stores, and what it gives up in doing so.
   const heading = authenticatedUser
     ? intl.formatMessage(messages.welcomeBack, {
       name: getGreetingName(authenticatedUser),
