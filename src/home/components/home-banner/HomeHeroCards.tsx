@@ -1,9 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { AppContext } from '@edx/frontend-platform/react';
 import { useMediaQuery } from '@openedx/paragon';
 
-import type { AppContextTypes } from '@src/header/types';
 import { useHeroCourses } from '@src/data/hero-courses/hooks';
 import { HERO_CARD_COUNT, HERO_CARD_SWAP_INTERVAL_MS } from '@src/data/hero-courses/constants';
 import HomeHeroCard from './HomeHeroCard';
@@ -17,7 +15,6 @@ import messages from './messages';
  */
 const HomeHeroCards = () => {
   const intl = useIntl();
-  const { authenticatedUser } = useContext(AppContext) as AppContextTypes;
   const { data } = useHeroCourses();
   const [isSwapped, setIsSwapped] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -67,7 +64,6 @@ const HomeHeroCards = () => {
           // The first card leads until the timer flips them, and with only one
           // card it is always the one in front.
           isFront={courses.length === 1 || (index === 0) !== isSwapped}
-          isSignedIn={Boolean(authenticatedUser)}
         />
       ))}
     </div>

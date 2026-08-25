@@ -1,4 +1,3 @@
-import { AppContext } from '@edx/frontend-platform/react';
 import { getConfig } from '@edx/frontend-platform';
 
 import {
@@ -15,8 +14,8 @@ jest.mock('@src/data/hero-courses/hooks', () => ({
 
 const mockUseHeroCourses = useHeroCourses as jest.Mock;
 
-// Both default to isNew: false so the badge stays out of the way of every test
-// that is not about it.
+// Both default to isNew/isEnrolled: false so neither stays out of the way of
+// every test that is not about it.
 const courseA = {
   courseId: 'course-v1:Org+A+2026',
   title: 'Buddhist Logic and Epistemology',
@@ -24,6 +23,7 @@ const courseA = {
   providerName: 'Khyentse Foundation',
   providerLogo: 'https://lms.example.com/logo/kf.png',
   isNew: false,
+  isEnrolled: false,
 };
 
 const courseB = {
@@ -33,13 +33,8 @@ const courseB = {
   providerName: 'Kagyu Yeshe',
   providerLogo: null,
   isNew: false,
+  isEnrolled: false,
 };
-
-const renderSignedIn = () => render(
-  <AppContext.Provider value={{ authenticatedUser: { username: 'tenzin' }, config: {} } as any}>
-    <HomeHeroCards />
-  </AppContext.Provider>,
-);
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -216,22 +211,49 @@ describe('<HomeHeroCards />', () => {
     expect(screen.queryByText(messages.newCourse.defaultMessage)).not.toBeInTheDocument();
   });
 
-  it('links a signed-out visitor to the in-app about page', () => {
-    mockUseHeroCourses.mockReturnValue({ data: [courseA], isLoading: false, isError: false });
+  it('links a curated pick the visitor is not enrolled in to the in-app about page', () => {
+    mockUseHeroCourses.mockReturnValue({
+      data: [{ ...courseA, isEnrolled: false }],
+      isLoading: false,
+      isError: false,
+    });
 
     render(<HomeHeroCards />);
 
     expect(screen.getByRole('link')).toHaveAttribute('href', `/courses/${courseA.courseId}/about`);
   });
 
-  it('links a signed-in learner into the courseware on the LMS', () => {
-    mockUseHeroCourses.mockReturnValue({ data: [courseA], isLoading: false, isError: false });
+  it('links an enrolled course into the courseware on the LMS', () => {
+    mockUseHeroCourses.mockReturnValue({
+      data: [{ ...courseA, isEnrolled: true }],
+      isLoading: false,
+      isError: false,
+    });
 
-    renderSignedIn();
+    render(<HomeHeroCards />);
 
     expect(screen.getByRole('link')).toHaveAttribute(
       'href',
       `${getConfig().LMS_BASE_URL}/courses/${courseA.courseId}/course/`,
+    );
+  });
+
+  it('links a signed-in learner\'s unenrolled curated pick to the about page, not the courseware', () => {
+    // The regression case this whole change exists for: a signed-in learner
+    // must not be sent into a course they haven't joined.
+    mockUseHeroCourses.mockReturnValue({
+      data: [{ ...courseA, isEnrolled: false }, { ...courseB, isEnrolled: true }],
+      isLoading: false,
+      isError: false,
+    });
+
+    render(<HomeHeroCards />);
+
+    const links = screen.getAllByRole('link');
+    expect(links[0]).toHaveAttribute('href', `/courses/${courseA.courseId}/about`);
+    expect(links[1]).toHaveAttribute(
+      'href',
+      `${getConfig().LMS_BASE_URL}/courses/${courseB.courseId}/course/`,
     );
   });
 });

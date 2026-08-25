@@ -13,4 +13,6 @@ export interface HeroCourse {
   providerLogo: string | null;
   /** Whether to show a "new course" badge. The backend decides this by date. */
   isNew: boolean;
+  /** Whether the caller is enrolled in this course, as opposed to it being a curated pick. */
+  isEnrolled: boolean;
 }

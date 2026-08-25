@@ -10,13 +10,6 @@ interface HomeHeroCardProps {
   course: HeroCourse;
   /** Whether this card sits in front of the other in the stack. */
   isFront: boolean;
-  /**
-   * Whether anyone is signed in: a learner goes to the courseware, a
-   * signed-out visitor to the about page. Based on auth state rather than
-   * per-card enrollment, since the endpoint doesn't say which cards came from
-   * enrollments vs. curated picks.
-   */
-  isSignedIn: boolean;
 }
 
 /**
@@ -35,10 +28,10 @@ const getProviderInitials = (providerName: string) => providerName
 /**
  * One of the homepage hero's floating course cards.
  */
-const HomeHeroCard = ({ course, isFront, isSignedIn }: HomeHeroCardProps) => {
+const HomeHeroCard = ({ course, isFront }: HomeHeroCardProps) => {
   const intl = useIntl();
   const {
-    courseId, title, imageUrl, providerName, providerLogo, isNew,
+    courseId, title, imageUrl, providerName, providerLogo, isNew, isEnrolled,
   } = course;
 
   const aboutPath = ROUTES.COURSE_ABOUT.replace(':courseId', courseId);
@@ -76,9 +69,11 @@ const HomeHeroCard = ({ course, isFront, isSignedIn }: HomeHeroCardProps) => {
     </>
   );
 
-  // A learner is sent straight into the courseware on the LMS, which lives
-  // outside this app, so that leg cannot be a router Link.
-  if (isSignedIn) {
+  // Enrolled goes straight to the courseware on the LMS, which lives outside
+  // this app, so that leg cannot be a router Link. A curated pick the visitor
+  // hasn't joined goes to the about page instead, rather than dropping them
+  // into a course they can't yet access.
+  if (isEnrolled) {
     return (
       <a className={className} href={`${getConfig().LMS_BASE_URL}/courses/${courseId}/course/`}>
         {body}
