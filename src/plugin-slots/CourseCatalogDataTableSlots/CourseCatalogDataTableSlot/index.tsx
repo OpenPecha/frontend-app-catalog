@@ -51,7 +51,12 @@ const CourseCatalogDataTableSlot = ({
         manualPagination
         disableElevation
         RowStatusComponent={CatalogRowStatus}
-        filtersTitle={<CatalogFiltersHeader />}
+        // Only for the sidebar layout. Below that breakpoint Paragon swaps the
+        // sidebar for a dropdown and reuses `filtersTitle` as that dropdown's
+        // toggle label — putting our "Clear all" button inside a button. The
+        // dropdown falls back to Paragon's own translated title instead, and
+        // its own clear-filters control still appears in the status bar.
+        filtersTitle={isMedium ? undefined : <CatalogFiltersHeader />}
         defaultColumnValues={{ Filter: TextFilter }}
         itemCount={displayData?.total || totalCourses}
         pageSize={DEFAULT_PAGE_SIZE}

@@ -4,13 +4,12 @@ import { ExpandMore } from '@openedx/paragon/icons';
 
 import type { FilterColumn } from './types';
 
-// Course type starts collapsed to match the mockup; language/org start open.
-// Selections live in the column's own filter state, so collapsing a group
-// never loses a checked value.
-const DEFAULT_CLOSED = new Set(['modes']);
-
 const CollapsibleFilterGroup = ({ column }: { column: FilterColumn }) => {
-  const [isOpen, setIsOpen] = useState(!DEFAULT_CLOSED.has(column.id));
+  // Every group starts collapsed, so a reload always returns to the same
+  // compact panel. Open/closed state is deliberately not persisted anywhere.
+  // Selections live in the column's own filter state, so collapsing a group
+  // never loses a checked value.
+  const [isOpen, setIsOpen] = useState(false);
   const bodyId = `catalog-filter-group-${column.id}`;
 
   return (

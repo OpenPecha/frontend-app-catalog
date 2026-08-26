@@ -20,6 +20,13 @@ const rowStatusText = (firstRow: number, lastRow: number, itemCount: number) => 
   `Showing ${firstRow}–${lastRow} of ${itemCount} ${itemCount === 1 ? 'course' : 'courses'}`
 );
 
+/**
+ * Filter groups render collapsed, so their checkboxes are hidden from the
+ * accessibility tree until the group's toggle is clicked — same as for a user.
+ */
+const openFilterGroup = async (groupName: string) => {
+  await userEvent.click(screen.getByRole('button', { name: groupName }));
+};
 jest.mock('../data/course-list-search/hooks', () => ({
   useCourseListSearch: jest.fn(),
 }));
@@ -380,6 +387,7 @@ describe('CatalogPage', () => {
     render(<CatalogPage />);
 
     // First apply a filter
+    await openFilterGroup(messages.languages.defaultMessage);
     const englishCheckbox = screen.getByRole('checkbox', { name: /English/i });
     await userEvent.click(englishCheckbox);
 
@@ -641,6 +649,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
+    await openFilterGroup(messages.languages.defaultMessage);
     const englishCheckbox = screen.getByRole('checkbox', { name: /English/i });
 
     await userEvent.click(englishCheckbox);
@@ -672,6 +681,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
+    await openFilterGroup(messages.organizations.defaultMessage);
     const orgCheckbox = screen.getByRole('checkbox', { name: /Dev/i });
 
     await userEvent.click(orgCheckbox);
@@ -703,6 +713,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
+    await openFilterGroup(messages.languages.defaultMessage);
     const filterCheckbox = screen.getByRole('checkbox', { name: /English/i });
     await userEvent.click(filterCheckbox);
 
@@ -725,6 +736,7 @@ describe('CatalogPage', () => {
     render(<CatalogPage />);
 
     // Apply first filter
+    await openFilterGroup(messages.languages.defaultMessage);
     const englishCheckbox = screen.getByRole('checkbox', { name: /English/i });
     await userEvent.click(englishCheckbox);
 
@@ -733,6 +745,7 @@ describe('CatalogPage', () => {
     });
 
     // Apply second filter
+    await openFilterGroup(messages.organizations.defaultMessage);
     const orgCheckbox = screen.getByRole('checkbox', { name: /Dev/i });
     await userEvent.click(orgCheckbox);
 
@@ -764,6 +777,7 @@ describe('CatalogPage', () => {
     render(<CatalogPage />);
 
     // Apply filter
+    await openFilterGroup(messages.languages.defaultMessage);
     const filterCheckbox = screen.getByRole('checkbox', { name: /English/i });
     await userEvent.click(filterCheckbox);
 
@@ -835,6 +849,7 @@ describe('CatalogPage', () => {
       mockCourseListSearchResponse.results.length,
     );
 
+    await openFilterGroup(messages.organizations.defaultMessage);
     const orgCheckbox = screen.getByRole('checkbox', { name: /Dev/i });
     await userEvent.click(orgCheckbox);
 
@@ -879,6 +894,7 @@ describe('CatalogPage', () => {
 
     const { rerender } = render(<CatalogPage />);
 
+    await openFilterGroup(messages.languages.defaultMessage);
     const filterCheckbox = screen.getByRole('checkbox', { name: /English/i });
     await userEvent.click(filterCheckbox);
 
@@ -914,6 +930,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
+    await openFilterGroup(messages.languages.defaultMessage);
     const filterCheckbox = screen.getByRole('checkbox', { name: /English/i });
     await userEvent.click(filterCheckbox);
 
