@@ -40,8 +40,13 @@ export interface CatalogDataTableContext {
   /** Total results across every page, not just the current one. */
   itemCount: number;
   pageCount: number;
-  state: {
-    pageIndex: number;
+  /**
+   * Optional because Paragon defaults this context to `{}` — a component
+   * rendered outside a `<DataTable>` sees no state at all. Paragon's own
+   * RowStatus guards it the same way, so callers must too.
+   */
+  state?: {
+    pageIndex?: number;
     pageSize?: number;
     filters?: { id: string, value: string[] }[];
   };

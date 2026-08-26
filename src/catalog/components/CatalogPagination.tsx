@@ -32,7 +32,7 @@ const CatalogPagination = () => {
   return (
     <Pagination
       variant={isSmall ? 'reduced' : 'default'}
-      currentPage={state.pageIndex + 1}
+      currentPage={(state?.pageIndex ?? 0) + 1}
       onPageSelect={(pageNum: number) => gotoPage(pageNum - 1)}
       pageCount={pageCount}
       paginationLabel={intl.formatMessage(messages.paginationLabel)}

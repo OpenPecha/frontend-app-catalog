@@ -21,11 +21,6 @@ const messages = defineMessages({
     defaultMessage: 'There are currently no courses available in the catalog. Please check back later for new offerings.',
     description: 'No courses available alert message.',
   },
-  searchPlaceholder: {
-    id: 'category.catalog.search-placeholder',
-    defaultMessage: 'What would you like to learn?',
-    description: 'Placeholder text inside the course search input field.',
-  },
   searchResults: {
     id: 'category.catalog.search-results',
     defaultMessage: 'Search results for "{query}"',

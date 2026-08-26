@@ -1,6 +1,7 @@
 import { getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
+import sharedMessages from '@src/generic/messages';
 import {
   render, within, screen, waitFor, userEvent, act,
 } from '../setupTest';
@@ -155,7 +156,7 @@ describe('CatalogPage', () => {
     expect(screen.getByRole('button', { name: messages.languages.defaultMessage })).toBeInTheDocument();
     expect(screen.getByText('Filters')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
     expect(searchField).toBeInTheDocument();
   });
 
@@ -178,7 +179,7 @@ describe('CatalogPage', () => {
     expect(screen.queryByText(messages.languages.defaultMessage)).not.toBeInTheDocument();
     expect(screen.queryByText('Filters')).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
-    const searchField = screen.queryByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.queryByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
     expect(searchField).not.toBeInTheDocument();
   });
 
@@ -194,7 +195,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     expect(searchField).toHaveValue('');
     expect(searchField).toBeInTheDocument();
@@ -215,7 +216,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     await userEvent.type(searchField, 'python');
     await userEvent.keyboard('{Enter}');
@@ -244,7 +245,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     await userEvent.type(searchField, 'python');
     await userEvent.keyboard('{Enter}');
@@ -277,7 +278,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     await userEvent.type(searchField, 'machine learning');
     await userEvent.keyboard('{Enter}');
@@ -300,7 +301,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     await userEvent.click(searchField);
     await userEvent.keyboard('{Enter}');
@@ -396,7 +397,7 @@ describe('CatalogPage', () => {
     });
 
     // Then perform a search - filters should be preserved
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
     await userEvent.type(searchField, 'data science');
     await userEvent.keyboard('{Enter}');
 
@@ -430,7 +431,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
     await userEvent.type(searchField, 'python');
     await userEvent.keyboard('{Enter}');
 
@@ -479,7 +480,7 @@ describe('CatalogPage', () => {
     render(<CatalogPage />);
 
     // Perform search
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
     await userEvent.type(searchField, 'python');
     await userEvent.keyboard('{Enter}');
 
@@ -519,7 +520,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     // Test search with special characters
     await userEvent.type(searchField, 'C++ & Java');
@@ -549,7 +550,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     await userEvent.type(searchField, 'python');
     await userEvent.keyboard('{Enter}');
@@ -1223,7 +1224,7 @@ describe('CatalogPage', () => {
 
       render(<CatalogPage />);
 
-      const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+      const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
       await userEvent.type(searchField, 'python');
       await userEvent.keyboard('{Enter}');
 
@@ -1246,7 +1247,7 @@ describe('CatalogPage', () => {
 
       const { rerender } = render(<CatalogPage />);
 
-      const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+      const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
       await userEvent.type(searchField, 'nonexistent');
       await userEvent.keyboard('{Enter}');
 
@@ -1293,7 +1294,7 @@ describe('CatalogPage', () => {
 
       const { rerender } = render(<CatalogPage />);
 
-      const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+      const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
       await userEvent.type(searchField, query);
       await userEvent.keyboard('{Enter}');
@@ -1353,7 +1354,7 @@ describe('CatalogPage', () => {
 
       render(<CatalogPage />);
 
-      const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+      const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
       await userEvent.type(searchField, 'python');
       await userEvent.keyboard('{Enter}');
@@ -1388,7 +1389,7 @@ describe('CatalogPage', () => {
 
       render(<CatalogPage />);
 
-      const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+      const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
       await userEvent.type(searchField, 'C++ & Java');
       await userEvent.keyboard('{Enter}');
 
@@ -1417,7 +1418,7 @@ describe('CatalogPage', () => {
 
       render(<CatalogPage />);
 
-      const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+      const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
       await userEvent.type(searchField, 'python');
       await userEvent.keyboard('{Enter}');
@@ -1456,7 +1457,7 @@ describe('CatalogPage', () => {
       render(<CatalogPage />);
 
       expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
-      const searchField = screen.queryByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+      const searchField = screen.queryByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
       expect(searchField).not.toBeInTheDocument();
     });
   });
@@ -1493,7 +1494,7 @@ describe('CatalogPage search integration', () => {
     expect((initialFormData as FormData).get('search_string')).toBeNull();
 
     const searchField = await screen.findByPlaceholderText(
-      messages.searchPlaceholder.defaultMessage,
+      sharedMessages.courseSearchPlaceholder.defaultMessage,
     );
 
     await userEvent.type(searchField, 'python');
@@ -1542,7 +1543,7 @@ describe('Debounced search', () => {
 
     mockFetchData.mockClear();
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     // Use real timers for userEvent, then switch back to fake timers
     jest.useRealTimers();
@@ -1589,7 +1590,7 @@ describe('Debounced search', () => {
 
     mockFetchData.mockClear();
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     jest.useRealTimers();
     await userEvent.type(searchField, 'react', { delay: 0 });
@@ -1629,7 +1630,7 @@ describe('Debounced search', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     jest.useRealTimers();
     await userEvent.type(searchField, 'javascript');
@@ -1666,7 +1667,7 @@ describe('Debounced search', () => {
 
     render(<CatalogPage />);
 
-    const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
+    const searchField = screen.getByPlaceholderText(sharedMessages.courseSearchPlaceholder.defaultMessage);
 
     expect(searchField).toHaveValue('');
 

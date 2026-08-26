@@ -6,7 +6,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import classNames from 'classnames';
 import { getConfig } from '@edx/frontend-platform';
 
-import messages from '@src/catalog/messages';
+import sharedMessages from '@src/generic/messages';
 import type { CourseCatalogSearchFieldSlotProps } from './types';
 
 const CourseCatalogSearchFieldSlot = ({
@@ -38,7 +38,7 @@ const CourseCatalogSearchFieldSlot = ({
           })}
         >
           <SearchField
-            placeholder={intl.formatMessage(messages.searchPlaceholder)}
+            placeholder={intl.formatMessage(sharedMessages.courseSearchPlaceholder)}
             onChange={(value: string) => {
               setSearchInput(value);
             }}
