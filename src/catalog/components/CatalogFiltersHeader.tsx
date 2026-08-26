@@ -3,11 +3,7 @@ import { Button, DataTableContext } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from '../messages';
-
-interface FiltersHeaderContext {
-  state?: { filters?: unknown[] };
-  setAllFilters?: (filters: unknown[]) => void;
-}
+import type { CatalogDataTableContext } from './types';
 
 /**
  * The filter sidebar's heading: the "Filters" title plus a "Clear all" button.
@@ -21,7 +17,7 @@ interface FiltersHeaderContext {
  */
 const CatalogFiltersHeader = () => {
   const intl = useIntl();
-  const { state, setAllFilters } = useContext(DataTableContext) as FiltersHeaderContext;
+  const { state, setAllFilters } = useContext(DataTableContext) as CatalogDataTableContext;
   const hasActiveFilters = (state?.filters?.length ?? 0) > 0;
 
   return (

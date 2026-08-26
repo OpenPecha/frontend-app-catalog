@@ -4,7 +4,7 @@ import { Close } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from '../messages';
-import type { FilterChoice, FilterColumn } from './types';
+import type { CatalogDataTableContext, FilterChoice, FilterColumn } from './types';
 
 interface ActiveChip {
   columnId: string;
@@ -17,10 +17,7 @@ interface ActiveChip {
 // sidebar never falls out of sync with what's shown here.
 const FilterChips = () => {
   const intl = useIntl();
-  const { state, columns } = useContext(DataTableContext) as {
-    state: { filters?: { id: string, value: string[] }[] };
-    columns: FilterColumn[];
-  };
+  const { state, columns } = useContext(DataTableContext) as CatalogDataTableContext;
 
   const activeChips: ActiveChip[] = (state?.filters ?? []).flatMap((filter) => {
     const column = columns.find((c) => c.id === filter.id);

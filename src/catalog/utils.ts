@@ -3,7 +3,7 @@ import capitalize from 'lodash.capitalize';
 
 import type { Aggregations, DataTableFilter } from '@src/data/course-list-search/types';
 import CollapsibleFilterGroup from './components/CollapsibleFilterGroup';
-import type { GetPageTitleProps } from './types';
+import type { GetSearchTitleProps } from './types';
 import messages from './messages';
 
 /**
@@ -99,17 +99,18 @@ export const compareFilters = (
 };
 
 /**
- * Determines the appropriate page title based on search state and results.
+ * The heading shown while a search is active: either the "no results" wording
+ * or the "results for X" wording.
+ *
+ * Only call this when `searchString` is non-empty — with no search the page
+ * shows its own branded heading instead (see CatalogPageHead), so there is no
+ * "default" title for this to return.
  */
-export const getPageTitle = ({
+export const getSearchTitle = ({
   intl,
   searchString,
   courseDataResultsLength,
-}: GetPageTitleProps) => {
-  if (!searchString) {
-    return intl.formatMessage(messages.exploreCourses);
-  }
-
+}: GetSearchTitleProps) => {
   if ((courseDataResultsLength ?? 0) === 0) {
     return intl.formatMessage(messages.noSearchResults, { query: searchString });
   }

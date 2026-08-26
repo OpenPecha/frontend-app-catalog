@@ -23,3 +23,30 @@ export interface FilterColumn {
   filterChoices: FilterChoice[];
   getHeaderProps: () => { key: string };
 }
+
+/**
+ * The parts of Paragon's `DataTableContext` this page's components read.
+ *
+ * One shared description rather than one per component: the context is a
+ * single object, so four separate (and previously disagreeing) declarations of
+ * it could drift apart silently. Optional members are the ones that only exist
+ * in some table configurations, so callers must guard them.
+ */
+export interface CatalogDataTableContext {
+  /** Rows on the current page; absent when the table isn't paginated. */
+  page?: unknown[];
+  /** All rows, used as the fallback when `page` is absent. */
+  rows?: unknown[];
+  /** Total results across every page, not just the current one. */
+  itemCount: number;
+  pageCount: number;
+  state: {
+    pageIndex: number;
+    pageSize?: number;
+    filters?: { id: string, value: string[] }[];
+  };
+  gotoPage: (pageIndex: number) => void;
+  /** Only present while the table is filterable. */
+  setAllFilters?: (filters: unknown[]) => void;
+  columns: FilterColumn[];
+}

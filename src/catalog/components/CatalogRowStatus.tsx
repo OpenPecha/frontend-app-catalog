@@ -3,13 +3,7 @@ import { DataTable, DataTableContext } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from '../messages';
-
-interface RowStatusContext {
-  page?: unknown[];
-  rows?: unknown[];
-  itemCount: number;
-  state: { pageSize?: number, pageIndex?: number };
-}
+import type { CatalogDataTableContext } from './types';
 
 // Defined at module scope so it's the same function on every render rather
 // than a fresh component type.
@@ -27,7 +21,7 @@ const CatalogRowStatus = ({ className }: { className?: string }) => {
   const intl = useIntl();
   const {
     page, rows, itemCount, state,
-  } = useContext(DataTableContext) as RowStatusContext;
+  } = useContext(DataTableContext) as CatalogDataTableContext;
 
   const rowCount = page?.length || rows?.length || 0;
   const firstRow = (state?.pageSize || 0) * (state?.pageIndex || 0) + 1;

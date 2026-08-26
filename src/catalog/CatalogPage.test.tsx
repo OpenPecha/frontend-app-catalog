@@ -1190,7 +1190,7 @@ describe('CatalogPage', () => {
     expect(screen.queryByRole('button', { name: /of/i })).not.toBeInTheDocument();
   });
 
-  describe('SubHeader title', () => {
+  describe('page heading', () => {
     it('should display default title when no search is performed', () => {
       mockUseCourseListSearch.mockReturnValue({
         isLoading: false,

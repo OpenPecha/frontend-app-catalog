@@ -23,8 +23,8 @@ const messages = defineMessages({
   },
   searchPlaceholder: {
     id: 'category.catalog.search-placeholder',
-    defaultMessage: 'Search for a course',
-    description: 'Search placeholder.',
+    defaultMessage: 'What would you like to learn?',
+    description: 'Placeholder text inside the course search input field.',
   },
   searchResults: {
     id: 'category.catalog.search-results',
@@ -35,11 +35,6 @@ const messages = defineMessages({
     id: 'category.catalog.no-search-results',
     defaultMessage: 'We couldn\'t find any results for "{query}"',
     description: 'No search results.',
-  },
-  exploreCourses: {
-    id: 'category.catalog.explore-courses',
-    defaultMessage: 'Explore courses',
-    description: 'Explore courses.',
   },
   noResultsFound: {
     id: 'category.catalog.no-results-found',

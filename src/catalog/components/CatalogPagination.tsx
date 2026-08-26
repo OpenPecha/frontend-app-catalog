@@ -5,6 +5,7 @@ import {
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from '../messages';
+import type { CatalogDataTableContext } from './types';
 
 // Mirrors Paragon's own TablePagination (rendered by the default
 // DataTable.TableFooter), just with a brand-styled, responsive variant
@@ -22,11 +23,7 @@ const CatalogPagination = () => {
   const isSmall = useMediaQuery({ maxWidth: breakpoints.small.maxWidth });
   const {
     pageCount, state, gotoPage,
-  } = useContext(DataTableContext) as {
-    pageCount: number;
-    state: { pageIndex: number };
-    gotoPage: (index: number) => void;
-  };
+  } = useContext(DataTableContext) as CatalogDataTableContext;
 
   if (!pageCount || pageCount < 2) {
     return null;
