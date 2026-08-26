@@ -10,6 +10,15 @@ import { mockCourseListSearchResponse } from '../__mocks__';
 import CatalogPage from './CatalogPage';
 import messages from './messages';
 
+/**
+ * The expected text of the "Showing 1–20 of 99 courses" row status, built the
+ * same way `messages.rowStatus` formats it (en dash, no trailing period, and
+ * the count's plural form) so these assertions stay in one place.
+ */
+const rowStatusText = (firstRow: number, lastRow: number, itemCount: number) => (
+  `Showing ${firstRow}–${lastRow} of ${itemCount} ${itemCount === 1 ? 'course' : 'courses'}`
+);
+
 jest.mock('../data/course-list-search/hooks', () => ({
   useCourseListSearch: jest.fn(),
 }));
@@ -108,7 +117,7 @@ describe('CatalogPage', () => {
     });
 
     render(<CatalogPage />);
-    expect(screen.getByText(messages.exploreCourses.defaultMessage)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
     const infoAlert = screen.getByRole('alert');
     expect(within(infoAlert).getByText(messages.noCoursesAvailable.defaultMessage)).toBeInTheDocument();
     expect(within(infoAlert).getByText(messages.noCoursesAvailableMessage.defaultMessage)).toBeInTheDocument();
@@ -125,7 +134,7 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    expect(screen.getByText(messages.languages.defaultMessage)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: messages.languages.defaultMessage })).toBeInTheDocument();
     const englishFilter = screen.getByText('English');
     expect(within(englishFilter).getByText(
       mockCourseListSearchResponse.aggs.language.terms.en,
@@ -143,9 +152,9 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    expect(screen.getByText(messages.languages.defaultMessage)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: messages.languages.defaultMessage })).toBeInTheDocument();
     expect(screen.getByText('Filters')).toBeInTheDocument();
-    expect(screen.getByText(messages.exploreCourses.defaultMessage)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
     const searchField = screen.getByPlaceholderText(messages.searchPlaceholder.defaultMessage);
     expect(searchField).toBeInTheDocument();
   });
@@ -168,7 +177,7 @@ describe('CatalogPage', () => {
 
     expect(screen.queryByText(messages.languages.defaultMessage)).not.toBeInTheDocument();
     expect(screen.queryByText('Filters')).not.toBeInTheDocument();
-    expect(screen.getByText(messages.exploreCourses.defaultMessage)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
     const searchField = screen.queryByPlaceholderText(messages.searchPlaceholder.defaultMessage);
     expect(searchField).not.toBeInTheDocument();
   });
@@ -331,7 +340,7 @@ describe('CatalogPage', () => {
 
     const rowStatus = screen.getAllByTestId('row-status')[0];
     expect(rowStatus).toHaveTextContent(
-      `Showing ${searchResults.results.length} - ${searchResults.results.length} of ${searchResults.total}.`,
+      rowStatusText(searchResults.results.length, searchResults.results.length, searchResults.total),
     );
   });
 
@@ -586,11 +595,11 @@ describe('CatalogPage', () => {
 
       rowStatuses.forEach(rowStatus => {
         expect(rowStatus).toHaveTextContent(
-          `Showing 1 - ${mockCourseListSearchResponse.results.length} of ${mockCourseListSearchResponse.total}.`,
+          rowStatusText(1, mockCourseListSearchResponse.results.length, mockCourseListSearchResponse.total),
         );
       });
 
-      expect(rowStatuses.length).toBe(2);
+      expect(rowStatuses.length).toBe(1);
     });
   });
 
@@ -604,7 +613,7 @@ describe('CatalogPage', () => {
     });
 
     render(<CatalogPage />);
-    expect(screen.getByText(messages.exploreCourses.defaultMessage)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
 
     const courseCards = screen.getAllByTestId('course-card');
     expect(courseCards.length).toBe(mockCourseListSearchResponse.results.length);
@@ -954,7 +963,7 @@ describe('CatalogPage', () => {
     await waitFor(() => {
       const rowStatuses = screen.getAllByTestId('row-status');
       expect(rowStatuses[0]).toHaveTextContent(
-        `Showing 1 - ${mockCourseListSearchResponse.results.length} of ${mockCourseListSearchResponse.results.length}.`,
+        rowStatusText(1, mockCourseListSearchResponse.results.length, mockCourseListSearchResponse.results.length),
       );
     });
 
@@ -971,7 +980,7 @@ describe('CatalogPage', () => {
     await waitFor(() => {
       const rowStatuses = screen.getAllByTestId('row-status');
       expect(rowStatuses[0]).toHaveTextContent(
-        `Showing 1 - ${filteredResponse.results.length} of ${filteredResponse.results.length}.`,
+        rowStatusText(1, filteredResponse.results.length, filteredResponse.results.length),
       );
     });
   });
@@ -1016,12 +1025,11 @@ describe('CatalogPage', () => {
     render(<CatalogPage />);
 
     // pageCount should be Math.ceil(25 / 20) = 2
-    const paginationButton = screen.getByRole('button', { name: /1 of 2/i });
-    expect(paginationButton).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Page 2' })).toBeInTheDocument();
 
     // itemCount is passed to DataTable as courseData.total (25)
     const rowStatus = screen.getAllByTestId('row-status')[0];
-    expect(rowStatus).toHaveTextContent('Showing 1 - 3 of 25.');
+    expect(rowStatus).toHaveTextContent(rowStatusText(1, 3, 25));
   });
 
   it('should calculate pageCount based on results length when total is not provided', () => {
@@ -1042,19 +1050,15 @@ describe('CatalogPage', () => {
 
     render(<CatalogPage />);
 
-    // When pageCount = 1, no dropdown button is shown, only disabled navigation buttons
-    const previousButton = screen.getByRole('button', { name: /Previous/i });
-    const nextButton = screen.getByRole('button', { name: /Next/i });
-    expect(previousButton).toBeDisabled();
-    expect(nextButton).toBeDisabled();
-
-    // Pagination navigation still exists
-    const paginationNav = screen.getByRole('navigation', { name: /table pagination/i });
-    expect(paginationNav).toBeInTheDocument();
+    // A single page of results renders no pager at all, so the footer's
+    // divider doesn't end up floating under the cards with nothing beneath it.
+    expect(
+      screen.queryByRole('navigation', { name: messages.paginationLabel.defaultMessage }),
+    ).not.toBeInTheDocument();
 
     const rowStatus = screen.getAllByTestId('row-status')[0];
     expect(rowStatus).toHaveTextContent(
-      `Showing 1 - ${responseWithoutTotal.results.length} of ${responseWithoutTotal.results.length}.`,
+      rowStatusText(1, responseWithoutTotal.results.length, responseWithoutTotal.results.length),
     );
   });
 
@@ -1077,17 +1081,14 @@ describe('CatalogPage', () => {
     render(<CatalogPage />);
 
     // pageCount should be Math.ceil(3 / 20) = 1
-    const previousButton = screen.getByRole('button', { name: /Previous/i });
-    const nextButton = screen.getByRole('button', { name: /Next/i });
-    expect(previousButton).toBeDisabled();
-    expect(nextButton).toBeDisabled();
-
-    // Pagination navigation still exists
-    const paginationNav = screen.getByRole('navigation', { name: /table pagination/i });
-    expect(paginationNav).toBeInTheDocument();
+    // A single page of results renders no pager at all, so the footer's
+    // divider doesn't end up floating under the cards with nothing beneath it.
+    expect(
+      screen.queryByRole('navigation', { name: messages.paginationLabel.defaultMessage }),
+    ).not.toBeInTheDocument();
 
     const rowStatus = screen.getAllByTestId('row-status')[0];
-    expect(rowStatus).toHaveTextContent('Showing 1 - 3 of 3.');
+    expect(rowStatus).toHaveTextContent(rowStatusText(1, 3, 3));
   });
 
   it('should handle empty results array correctly', () => {
@@ -1134,17 +1135,13 @@ describe('CatalogPage', () => {
     // pageCount = Math.ceil(20 / 20) = 1
     // When there is only one page, dropdown button is not shown
     const rowStatus = screen.getAllByTestId('row-status')[0];
-    expect(rowStatus).toHaveTextContent('Showing 1 - 3 of 20.');
+    expect(rowStatus).toHaveTextContent(rowStatusText(1, 3, 20));
 
-    // Both navigation buttons should be disabled, because there is only one page
-    const previousButton = screen.getByRole('button', { name: /Previous/i });
-    const nextButton = screen.getByRole('button', { name: /Next/i });
-    expect(previousButton).toBeDisabled();
-    expect(nextButton).toBeDisabled();
-
-    // Pagination navigation still exists
-    const paginationNav = screen.getByRole('navigation', { name: /table pagination/i });
-    expect(paginationNav).toBeInTheDocument();
+    // A single page of results renders no pager at all, so the footer's
+    // divider doesn't end up floating under the cards with nothing beneath it.
+    expect(
+      screen.queryByRole('navigation', { name: messages.paginationLabel.defaultMessage }),
+    ).not.toBeInTheDocument();
   });
 
   it('should prioritize courseData.total over results.length for itemCount', () => {
@@ -1166,11 +1163,10 @@ describe('CatalogPage', () => {
     render(<CatalogPage />);
 
     // pageCount should be Math.ceil(100 / 20) = 5
-    const paginationButton = screen.getByRole('button', { name: /1 of 5/i });
-    expect(paginationButton).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Page 5' })).toBeInTheDocument();
 
     const rowStatus = screen.getAllByTestId('row-status')[0];
-    expect(rowStatus).toHaveTextContent('Showing 1 - 2 of 100.');
+    expect(rowStatus).toHaveTextContent(rowStatusText(1, 2, 100));
   });
 
   it('should calculate pageCount as 0 when both total and totalCourses are 0', () => {
@@ -1206,7 +1202,7 @@ describe('CatalogPage', () => {
 
       render(<CatalogPage />);
 
-      expect(screen.getByText(messages.exploreCourses.defaultMessage)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
     });
 
     it('should display search results title when search has results', async () => {
@@ -1370,7 +1366,7 @@ describe('CatalogPage', () => {
       await userEvent.keyboard('{Enter}');
 
       await waitFor(() => {
-        expect(screen.getByText(messages.exploreCourses.defaultMessage)).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
       });
     });
 
@@ -1459,7 +1455,7 @@ describe('CatalogPage', () => {
 
       render(<CatalogPage />);
 
-      expect(screen.getByText(messages.exploreCourses.defaultMessage)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Discover new');
       const searchField = screen.queryByPlaceholderText(messages.searchPlaceholder.defaultMessage);
       expect(searchField).not.toBeInTheDocument();
     });

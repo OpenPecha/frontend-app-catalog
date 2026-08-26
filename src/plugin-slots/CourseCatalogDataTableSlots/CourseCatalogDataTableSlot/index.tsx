@@ -7,6 +7,8 @@ import { getConfig } from '@edx/frontend-platform';
 import { DEFAULT_PAGE_SIZE } from '@src/data/course-list-search/constants';
 
 import messages from '@src/catalog/messages';
+import CatalogRowStatus from '@src/catalog/components/CatalogRowStatus';
+import CatalogFiltersHeader from '@src/catalog/components/CatalogFiltersHeader';
 import type { CourseCatalogDataTableSlotProps } from './types';
 
 import CourseCatalogDataTableControlBarSlot from '../CourseCatalogDataTableControlBarSlot';
@@ -47,6 +49,9 @@ const CourseCatalogDataTableSlot = ({
         isPaginated
         manualFilters
         manualPagination
+        disableElevation
+        RowStatusComponent={CatalogRowStatus}
+        filtersTitle={<CatalogFiltersHeader />}
         defaultColumnValues={{ Filter: TextFilter }}
         itemCount={displayData?.total || totalCourses}
         pageSize={DEFAULT_PAGE_SIZE}

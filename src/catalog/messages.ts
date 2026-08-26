@@ -61,6 +61,43 @@ const messages = defineMessages({
     defaultMessage: 'Course types',
     description: 'Course types filter.',
   },
+  pageEyebrow: {
+    id: 'category.catalog.page-eyebrow',
+    defaultMessage: 'The full catalogue',
+    description: 'Small label above the catalog page heading.',
+  },
+  pageHeading: {
+    id: 'category.catalog.page-heading',
+    defaultMessage: 'Discover <accent>new</accent>',
+    description: 'Catalog page heading. Text inside <accent> is styled differently'
+      + ' (italic, accent color) but is part of the same sentence, so translations'
+      + ' may move the tag to wherever the emphasis belongs.',
+  },
+  filtersTitle: {
+    id: 'category.catalog.filter.title',
+    defaultMessage: 'Filters',
+    description: 'Heading above the filter sidebar.',
+  },
+  clearFiltersText: {
+    id: 'category.catalog.filter.clear-all',
+    defaultMessage: 'Clear all',
+    description: 'Button that clears every active filter.',
+  },
+  removeFilter: {
+    id: 'category.catalog.filter.remove-chip',
+    defaultMessage: 'Remove filter: {label}',
+    description: 'Accessible label for a chip\'s remove button.',
+  },
+  paginationLabel: {
+    id: 'category.catalog.pagination-label',
+    defaultMessage: 'Course catalog pagination',
+    description: 'Accessible label for the pagination nav.',
+  },
+  rowStatus: {
+    id: 'category.catalog.row-status',
+    defaultMessage: 'Showing <b>{firstRow}–{lastRow}</b> of <b>{itemCount}</b> {itemCount, plural, one {course} other {courses}}',
+    description: 'Describes how many of the total courses the current page is showing. <b> wraps the counts in bold.',
+  },
 });
 
 export default messages;

@@ -1,10 +1,8 @@
-import classNames from 'classnames';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { PluginSlot } from '@openedx/frontend-plugin-framework';
-import { breakpoints, useMediaQuery } from '@openedx/paragon';
 
+import CatalogPageHead from '@src/catalog/components/CatalogPageHead';
 import { getPageTitle } from '@src/catalog/utils';
-import { SubHeader } from '@src/generic';
 import type { CourseCatalogIntroSlotProps } from './types';
 
 const CourseCatalogIntroSlot = ({
@@ -12,7 +10,11 @@ const CourseCatalogIntroSlot = ({
   courseDataResultsLength,
 }: CourseCatalogIntroSlotProps) => {
   const intl = useIntl();
-  const isMedium = useMediaQuery({ maxWidth: breakpoints.medium.maxWidth });
+
+  // Resolved here, not inside CatalogPageHead: PluginSlot's prop merging
+  // rewrites falsy prop values to an empty string, so a real result count of
+  // 0 would reach the child as '' and be mistaken for "has results".
+  const searchTitle = getPageTitle({ intl, searchString, courseDataResultsLength });
 
   return (
     <PluginSlot
@@ -22,14 +24,7 @@ const CourseCatalogIntroSlot = ({
       }}
       pluginProps={{ searchString, courseDataResultsLength }}
     >
-      <SubHeader
-        title={getPageTitle({
-          intl,
-          searchString,
-          courseDataResultsLength,
-        })}
-        className={classNames({ 'mx-2.5': isMedium })}
-      />
+      <CatalogPageHead searchString={searchString} searchTitle={searchTitle} />
     </PluginSlot>
   );
 };
