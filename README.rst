@@ -119,37 +119,6 @@ The dev server is running at `http://apps.local.openedx.io:1998/catalog/ <http:/
 `Tutor <https://github.com/overhangio/tutor>`_. If you start Tutor with ``tutor dev start catalog``
 that should give you everything you need as a companion to this frontend.
 
-Styling lives in the brand repository
-====================================
-
-Most of this MFE's visual design is **not in this repository**. It lives in the
-companion brand repo (``brand-openedx``), which is wired in as ``@edx/brand``
-via the ``localModules`` entry in ``module.config.js``. In particular
-``paragon/_catalog.scss`` there holds the styling for the home, catalog
-("Discover new"), and course-about pages, and ``src/index.scss`` here imports
-it as ``~@edx/brand/paragon/catalog``.
-
-**Look for styles there first.** Searching only this repository for a colour,
-spacing value, or class name will usually come up empty.
-
-For local development, note that ``module.config.js`` is gitignored, so it
-won't be present in a fresh clone. Without it ``@edx/brand`` resolves to the
-published ``@openedx/brand-openedx`` package, which does not contain
-``_catalog.scss`` or ``_footer.scss``, and those imports in ``src/index.scss``
-will fail to resolve. Create the file and point ``@edx/brand`` at your local
-``brand-openedx`` checkout:
-
-.. code-block:: js
-
-  module.exports = {
-    localModules: [
-      { moduleName: '@edx/brand', dir: '../brand-openedx' },
-    ],
-  };
-
-Deployed builds resolve the brand differently, so this applies to local
-development only.
-
 Internationalization
 ====================
 
