@@ -8,6 +8,7 @@ import { DEFAULT_PAGE_SIZE } from '@src/data/course-list-search/constants';
 
 import messages from '@src/catalog/messages';
 import CatalogRowStatus from '@src/catalog/components/CatalogRowStatus';
+import CatalogFilterStatus from '@src/catalog/components/CatalogFilterStatus';
 import CatalogFiltersHeader from '@src/catalog/components/CatalogFiltersHeader';
 import type { CourseCatalogDataTableSlotProps } from './types';
 
@@ -51,6 +52,7 @@ const CourseCatalogDataTableSlot = ({
         manualPagination
         disableElevation
         RowStatusComponent={CatalogRowStatus}
+        FilterStatusComponent={CatalogFilterStatus}
         // Only for the sidebar layout. Below that breakpoint Paragon swaps the
         // sidebar for a dropdown and reuses `filtersTitle` as that dropdown's
         // toggle label — putting our "Clear all" button inside a button. The
