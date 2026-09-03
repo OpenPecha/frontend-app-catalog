@@ -31,6 +31,11 @@ const messages = defineMessages({
     defaultMessage: 'Discover new',
     description: 'The text for the link to the Discover new page.',
   },
+  wishlist: {
+    id: 'category.header.wishlist',
+    defaultMessage: 'Wishlist',
+    description: 'The text for the link to the learner\'s wishlist page.',
+  },
 });
 
 export default messages;
