@@ -28,7 +28,7 @@ const messages = defineMessages({
   },
   discoverNew: {
     id: 'category.header.discoverNew',
-    defaultMessage: 'Discover new',
+    defaultMessage: 'Discover New',
     description: 'The text for the link to the Discover new page.',
   },
   wishlist: {
