@@ -38,6 +38,11 @@ describe('CourseOverview', () => {
       expect(screen.getByText(overviewText)).toBeInTheDocument();
     });
 
+    it('renders the section heading when content is provided', () => {
+      render(<CourseOverview overviewData="<p>Content</p>" courseId={mockCourseId} />);
+      expect(screen.getByRole('heading', { name: messages.courseOverviewHeading.defaultMessage })).toBeInTheDocument();
+    });
+
     it('renders nothing for non-staff users', () => {
       const { container } = render(<CourseOverview overviewData="" courseId={mockCourseId} />);
 

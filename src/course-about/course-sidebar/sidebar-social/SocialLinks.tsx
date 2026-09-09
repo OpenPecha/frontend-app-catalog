@@ -9,7 +9,6 @@ const SocialLinks = ({ socialLinks }: { socialLinks: SocialLink[] }) => (
         <Icon
           src={link.icon}
           screenReaderText={link.screenReaderText}
-          size="lg"
         />
       </Hyperlink>
     ))}

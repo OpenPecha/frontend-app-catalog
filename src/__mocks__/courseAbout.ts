@@ -114,6 +114,4 @@ export const mockCourseAboutResponse = {
   duration: '6 weeks',
   enrolledStudentsCount: 1234,
   requirements: '<p>Completion of an introductory programming course.</p>',
-  prerequisites: '<p>Basic programming knowledge and familiarity with the command line.</p>',
-  ocwLinks: '<ul><li><a href="https://ocw.mit.edu/example">Course materials on MIT OpenCourseWare</a></li></ul>',
 };

@@ -35,7 +35,6 @@ describe('CourseIntro', () => {
 
     expect(screen.getByText(mockCourseAboutResponse.name)).toBeInTheDocument();
     expect(screen.getByText(mockCourseAboutResponse.org)).toBeInTheDocument();
-    expect(screen.getByText(mockCourseAboutResponse.shortDescription)).toBeInTheDocument();
   });
 
   it('renders enrollment button for eligible users', async () => {

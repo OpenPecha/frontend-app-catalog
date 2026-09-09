@@ -79,23 +79,6 @@ describe('SidebarDetails', () => {
     });
   });
 
-  describe('Requirements', () => {
-    it('renders when provided', () => {
-      const courseData = createCourseData({ prerequisites: '<p>Basic programming knowledge</p>' });
-      render(<SidebarDetails courseAboutData={courseData} />);
-
-      expect(screen.getByText(messages.requirements.defaultMessage)).toBeInTheDocument();
-      expect(screen.getByText('Basic programming knowledge')).toBeInTheDocument();
-    });
-
-    it('does not render when not provided', () => {
-      const courseData = createCourseData({ prerequisites: null });
-      render(<SidebarDetails courseAboutData={courseData} />);
-
-      expect(screen.queryByText(messages.requirements.defaultMessage)).not.toBeInTheDocument();
-    });
-  });
-
   describe('Course price', () => {
     it('renders when provided', () => {
       const courseData = createCourseData({ coursePrice: '$99' });
@@ -198,7 +181,6 @@ describe('SidebarDetails', () => {
       start: '2024-01-15T00:00:00Z',
       end: '2024-06-15T00:00:00Z',
       startDateIsStillDefault: false,
-      prerequisites: '<p>Basic programming knowledge</p>',
       coursePrice: '$99',
       preRequisiteCourses: [{
         key: 'course-v1:TestX+CS100+2023',
@@ -213,8 +195,6 @@ describe('SidebarDetails', () => {
     expect(screen.getByText(/Jun 15, 2024/)).toBeInTheDocument();
     expect(screen.getByText(messages.estimatedEffort.defaultMessage)).toBeInTheDocument();
     expect(screen.getByText(courseData.effort ?? '')).toBeInTheDocument();
-    expect(screen.getByText(messages.requirements.defaultMessage)).toBeInTheDocument();
-    expect(screen.getByText('Basic programming knowledge')).toBeInTheDocument();
     expect(screen.getByText(messages.price.defaultMessage)).toBeInTheDocument();
     expect(screen.getByText(courseData.coursePrice)).toBeInTheDocument();
     expect(screen.getByText(messages.prerequisites.defaultMessage)).toBeInTheDocument();
@@ -226,7 +206,6 @@ describe('SidebarDetails', () => {
       start: null,
       end: null,
       startDateIsStillDefault: true,
-      prerequisites: null,
       coursePrice: null,
       preRequisiteCourses: [],
     });
@@ -236,7 +215,6 @@ describe('SidebarDetails', () => {
     expect(screen.queryByText(messages.releaseDate.defaultMessage)).not.toBeInTheDocument();
     expect(screen.queryByText(messages.archiveDate.defaultMessage)).not.toBeInTheDocument();
     expect(screen.queryByText(messages.estimatedEffort.defaultMessage)).not.toBeInTheDocument();
-    expect(screen.queryByText(messages.requirements.defaultMessage)).not.toBeInTheDocument();
     expect(screen.queryByText(messages.price.defaultMessage)).not.toBeInTheDocument();
     expect(screen.queryByText(messages.prerequisites.defaultMessage)).not.toBeInTheDocument();
   });

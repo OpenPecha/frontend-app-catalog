@@ -16,15 +16,15 @@ const messages = defineMessages({
     defaultMessage: 'Estimated effort',
     description: 'Estimated effort label.',
   },
+  estimatedEffortHours: {
+    id: 'catalog.course-about.sidebar-details.estimated-effort-hours',
+    defaultMessage: '{hours, plural, one {# hour/week} other {# hours/week}}',
+    description: 'Estimated effort value, in hours per week. Matches the "Hours of effort per week" field in Studio.',
+  },
   price: {
     id: 'catalog.course-about.sidebar-details.price',
     defaultMessage: 'Price',
     description: 'Price label.',
-  },
-  requirements: {
-    id: 'catalog.course-about.sidebar-details.requirements',
-    defaultMessage: 'Requirements',
-    description: 'Requirements label.',
   },
   prerequisites: {
     id: 'catalog.course-about.sidebar-details.prerequisites',

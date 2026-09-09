@@ -11,7 +11,6 @@ export const CourseIntro = ({ courseAboutData }: { courseAboutData: CourseAboutD
     id: courseId,
     displayOrgWithDefault: courseOrg,
     name: courseName,
-    shortDescription,
     ecommerceCheckoutLink,
   } = courseAboutData;
 
@@ -38,9 +37,6 @@ export const CourseIntro = ({ courseAboutData }: { courseAboutData: CourseAboutD
           title={<h1 className="my-0">{courseName}</h1>}
           subtitle={courseOrg}
         />
-        <Card.Section>
-          {shortDescription}
-        </Card.Section>
         <Card.Footer className="justify-content-start">
           {renderStatusContent()}
         </Card.Footer>

@@ -1,5 +1,6 @@
-import { Stack, Container, Card } from '@openedx/paragon';
-import { ListView as ListViewIcon, MenuBook as MenuBookIcon } from '@openedx/paragon/icons';
+import {
+  Stack, Container, Card, Icon,
+} from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +9,7 @@ import { ROUTES } from '@src/routes';
 import type { CourseAboutData } from '../../types';
 import SidebarDetailsItem from './SidebarDetailsItem';
 import { getSidebarDetails } from './utils';
+import { CheckSquareLineIcon } from './icons';
 import messages from './messages';
 
 const SidebarDetails = ({ courseAboutData }: { courseAboutData: CourseAboutData }) => {
@@ -21,39 +23,30 @@ const SidebarDetails = ({ courseAboutData }: { courseAboutData: CourseAboutData 
     const prerequisite = courseAboutData.preRequisiteCourses[0];
     const prerequisiteUrl = ROUTES.COURSE_ABOUT.replace(':courseId', prerequisite.key);
 
+    // Not a SidebarDetailsItem: that component pairs a short label with a
+    // short value on one line, and a course title is neither — it forced the
+    // title onto its own overflowing line with no room to breathe. This is
+    // its own block instead: a label row, the course link, then the
+    // completion sentence below, the way a course fact with this much to say
+    // needs more layout than a single label/value row can give it.
     return (
       <>
-        <SidebarDetailsItem
-          key="prerequisites"
-          icon={ListViewIcon}
-          label={intl.formatMessage(messages.prerequisites)}
-          value={<Link to={prerequisiteUrl}>{prerequisite.display}</Link>}
-        />
-        <Container className="p-3">
-          {intl.formatMessage(messages.prerequisitesCompletion, {
-            prerequisite: <Link to={prerequisiteUrl}>{prerequisite.display}</Link>,
-          })}
-        </Container>
+        <div className="course-about-sidebar-prerequisite">
+          <span className="course-about-sidebar-prerequisite__label">
+            <Icon src={CheckSquareLineIcon} />
+            {intl.formatMessage(messages.prerequisites)}
+          </span>
+          <Link to={prerequisiteUrl} className="course-about-sidebar-prerequisite__course">
+            {prerequisite.display}
+          </Link>
+          <p className="course-about-sidebar-prerequisite__completion">
+            {intl.formatMessage(messages.prerequisitesCompletion, {
+              prerequisite: <Link to={prerequisiteUrl}>{prerequisite.display}</Link>,
+            })}
+          </p>
+        </div>
         <Card.Divider />
       </>
-    );
-  };
-
-  const renderRequirements = () => {
-    if (!courseAboutData.prerequisites) {
-      return null;
-    }
-
-    return (
-      <SidebarDetailsItem
-        key="requirements"
-        icon={MenuBookIcon}
-        label={intl.formatMessage(messages.requirements)}
-        value={(
-          /* eslint-disable-next-line react/no-danger */
-          <span dangerouslySetInnerHTML={{ __html: courseAboutData.prerequisites }} />
-        )}
-      />
     );
   };
 
@@ -82,7 +75,6 @@ const SidebarDetails = ({ courseAboutData }: { courseAboutData: CourseAboutData 
             value={detail.value}
           />
         ))}
-      {renderRequirements()}
       {courseAboutData.coursePrice && (
         <CourseAboutSidebarCoursePriceSlot coursePrice={courseAboutData.coursePrice} />
       )}

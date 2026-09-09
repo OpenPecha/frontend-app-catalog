@@ -3,6 +3,5 @@ export const SIDEBAR_DETAIL_KEYS = {
   END_DATE: 'end-date',
   EFFORT: 'effort',
   DURATION: 'duration',
-  REQUIREMENTS: 'requirements',
   STUDENTS_ENROLLED: 'students-enrolled',
 } as const;

@@ -41,23 +41,22 @@ export const CourseOverview = ({ overviewData, courseId }: CourseOverviewProps) 
   return (
     <Container className="px-0">
       <Card>
-        {isGlobalStaff && (
-          <Card.Header
-            actions={(
-              <ActionRow>
-                <Button
-                  as="a"
-                  size="sm"
-                  block={isExtraSmall}
-                  variant="outline-primary"
-                  href={`${getConfig().STUDIO_BASE_URL}/settings/details/${courseId}`}
-                >
-                  {intl.formatMessage(messages.viewAboutPageInStudio)}
-                </Button>
-              </ActionRow>
-            )}
-          />
-        )}
+        <Card.Header
+          title={<h2 className="my-0 h3">{intl.formatMessage(messages.courseOverviewHeading)}</h2>}
+          actions={isGlobalStaff && (
+            <ActionRow>
+              <Button
+                as="a"
+                size="sm"
+                block={isExtraSmall}
+                variant="outline-primary"
+                href={`${getConfig().STUDIO_BASE_URL}/settings/details/${courseId}`}
+              >
+                {intl.formatMessage(messages.viewAboutPageInStudio)}
+              </Button>
+            </ActionRow>
+          )}
+        />
         <Card.Section>
           {
             /* eslint-disable-next-line react/no-danger */
@@ -68,3 +67,5 @@ export const CourseOverview = ({ overviewData, courseId }: CourseOverviewProps) 
     </Container>
   );
 };
+
+export default CourseOverview;

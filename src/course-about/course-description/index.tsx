@@ -17,7 +17,7 @@ export const CourseDescription = ({ description }: { description: string | null 
   return (
     <Container className="px-0">
       <Card>
-        <Card.Header title={<h2 className="my-0 h3">{intl.formatMessage(messages.courseDescriptionHeading)}</h2>} />
+        <Card.Header title={<h2 className="my-0 h3">{intl.formatMessage(messages.aboutThisCourseHeading)}</h2>} />
         <Card.Section>
           {
             /* eslint-disable-next-line react/no-danger */

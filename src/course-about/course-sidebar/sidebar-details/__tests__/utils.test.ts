@@ -136,6 +136,16 @@ describe('getSidebarDetails', () => {
     expect(effortDetail?.show).toBe(false);
   });
 
+  it('formats a numeric effort value as hours per week', () => {
+    const courseData = createCourseData({ effort: '3' });
+
+    const result = getSidebarDetails(mockIntl, courseData);
+    const effortDetail = getDetailByKey(result, SIDEBAR_DETAIL_KEYS.EFFORT);
+
+    expect(effortDetail?.show).toBe(true);
+    expect(mockIntl.formatMessage).toHaveBeenCalledWith(messages.estimatedEffortHours, { hours: 3 });
+  });
+
   it('handles duration when provided', () => {
     const courseData = createCourseData({
       duration: '8 weeks',

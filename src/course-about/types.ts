@@ -134,8 +134,6 @@ export interface CourseAboutData {
   duration: string | null;
   enrolledStudentsCount: number;
   requirements: string | null;
-  prerequisites: string | null;
-  ocwLinks: string | null;
 }
 
 export type CourseAboutDataPartial = Omit<Pick<CourseAboutData,
