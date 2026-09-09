@@ -1,20 +1,15 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
-  courseNumber: {
-    id: 'catalog.course-about.sidebar-details.course-number',
-    defaultMessage: 'Course number',
-    description: 'Course number label.',
+  releaseDate: {
+    id: 'catalog.course-about.sidebar-details.release-date',
+    defaultMessage: 'Release Date',
+    description: 'Release date label.',
   },
-  classesStart: {
-    id: 'catalog.course-about.sidebar-details.classes-start',
-    defaultMessage: 'Classes start',
-    description: 'Classes start label.',
-  },
-  classesEnd: {
-    id: 'catalog.course-about.sidebar-details.classes-end',
-    defaultMessage: 'Classes end',
-    description: 'Classes end label.',
+  archiveDate: {
+    id: 'catalog.course-about.sidebar-details.archive-date',
+    defaultMessage: 'Archive Date',
+    description: 'Archive date label.',
   },
   estimatedEffort: {
     id: 'catalog.course-about.sidebar-details.estimated-effort',
@@ -40,6 +35,16 @@ const messages = defineMessages({
     id: 'catalog.course-about.sidebar-details.prerequisites-completion',
     defaultMessage: 'You must successfully complete {prerequisite} before you begin this course.',
     description: 'Text explaining that a prerequisite course must be completed.',
+  },
+  courseDuration: {
+    id: 'catalog.course-about.sidebar-details.course-duration',
+    defaultMessage: 'Course duration',
+    description: 'Course duration label.',
+  },
+  studentsEnrolled: {
+    id: 'catalog.course-about.sidebar-details.students-enrolled',
+    defaultMessage: 'Students enrolled',
+    description: 'Students enrolled count label.',
   },
 });
 

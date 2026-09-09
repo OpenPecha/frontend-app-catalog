@@ -11,6 +11,36 @@ const messages = defineMessages({
     defaultMessage: 'View About Page in Studio',
     description: 'Link to view the Schedule and Details page in Studio.',
   },
+  courseDescriptionHeading: {
+    id: 'catalog.course-about.course-description.heading',
+    defaultMessage: 'Course Description',
+    description: 'Heading for the long course description section.',
+  },
+  learningOutcomesHeading: {
+    id: 'catalog.course-about.learning-outcomes.heading',
+    defaultMessage: 'What you will learn',
+    description: 'Heading for the learning outcomes section.',
+  },
+  instructorsHeading: {
+    id: 'catalog.course-about.instructors.heading',
+    defaultMessage: 'Instructors',
+    description: 'Heading for the instructors section.',
+  },
+  instructorImageAlt: {
+    id: 'catalog.course-about.instructors.image-alt',
+    defaultMessage: 'Photo of {name}',
+    description: 'Alt text for an instructor photo.',
+  },
+  courseRequirementsHeading: {
+    id: 'catalog.course-about.course-requirements.heading',
+    defaultMessage: 'Course Requirements',
+    description: 'Heading for the course requirements (marketing title) section.',
+  },
+  additionalResourcesHeading: {
+    id: 'catalog.course-about.additional-resources.heading',
+    defaultMessage: 'Additional Resources',
+    description: 'Heading for the additional resources (OCW links) section.',
+  },
 });
 
 export default messages;

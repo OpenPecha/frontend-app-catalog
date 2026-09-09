@@ -1,8 +1,10 @@
 import { IntlShape } from '@edx/frontend-platform/i18n';
 import {
   AccessTimeFilled as AccessTimeFilledIcon,
-  Event as EventIcon,
-  Info as InfoIcon,
+  Flag as FlagIcon,
+  Archive as ArchiveIcon,
+  Timelapse as TimelapseIcon,
+  People as PeopleIcon,
 } from '@openedx/paragon/icons';
 
 import { formatDate } from '@src/utils';
@@ -19,23 +21,16 @@ export const getSidebarDetails = (
   courseAboutData: CourseAboutData,
 ) => [
   {
-    key: SIDEBAR_DETAIL_KEYS.COURSE_NUMBER,
-    icon: InfoIcon,
-    label: intl.formatMessage(messages.courseNumber),
-    value: courseAboutData.displayNumberWithDefault,
-    show: true,
-  },
-  {
     key: SIDEBAR_DETAIL_KEYS.START_DATE,
-    icon: EventIcon,
-    label: intl.formatMessage(messages.classesStart),
+    icon: FlagIcon,
+    label: intl.formatMessage(messages.releaseDate),
     value: formatDate(((courseAboutData.advertisedStart || courseAboutData.start) ?? ''), intl),
     show: !courseAboutData.startDateIsStillDefault,
   },
   {
     key: SIDEBAR_DETAIL_KEYS.END_DATE,
-    icon: EventIcon,
-    label: intl.formatMessage(messages.classesEnd),
+    icon: ArchiveIcon,
+    label: intl.formatMessage(messages.archiveDate),
     value: formatDate((courseAboutData.end ?? ''), intl),
     show: !!courseAboutData.end,
   },
@@ -47,10 +42,17 @@ export const getSidebarDetails = (
     show: !!courseAboutData.effort,
   },
   {
-    key: SIDEBAR_DETAIL_KEYS.REQUIREMENTS,
-    icon: InfoIcon,
-    label: intl.formatMessage(messages.requirements),
-    value: courseAboutData.requirements,
-    show: !!courseAboutData?.requirements,
+    key: SIDEBAR_DETAIL_KEYS.DURATION,
+    icon: TimelapseIcon,
+    label: intl.formatMessage(messages.courseDuration),
+    value: courseAboutData.duration,
+    show: !!courseAboutData.duration,
+  },
+  {
+    key: SIDEBAR_DETAIL_KEYS.STUDENTS_ENROLLED,
+    icon: PeopleIcon,
+    label: intl.formatMessage(messages.studentsEnrolled),
+    value: courseAboutData.enrolledStudentsCount,
+    show: courseAboutData.enrolledStudentsCount != null,
   },
 ];

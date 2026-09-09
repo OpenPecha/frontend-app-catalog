@@ -1,5 +1,5 @@
 import { Stack, Container, Card } from '@openedx/paragon';
-import { ListView as ListViewIcon } from '@openedx/paragon/icons';
+import { ListView as ListViewIcon, MenuBook as MenuBookIcon } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Link } from 'react-router-dom';
 
@@ -39,6 +39,24 @@ const SidebarDetails = ({ courseAboutData }: { courseAboutData: CourseAboutData 
     );
   };
 
+  const renderRequirements = () => {
+    if (!courseAboutData.prerequisites) {
+      return null;
+    }
+
+    return (
+      <SidebarDetailsItem
+        key="requirements"
+        icon={MenuBookIcon}
+        label={intl.formatMessage(messages.requirements)}
+        value={(
+          /* eslint-disable-next-line react/no-danger */
+          <span dangerouslySetInnerHTML={{ __html: courseAboutData.prerequisites }} />
+        )}
+      />
+    );
+  };
+
   const renderAboutSidebarHtml = () => {
     if (!courseAboutData.aboutSidebarHtml) {
       return null;
@@ -64,6 +82,7 @@ const SidebarDetails = ({ courseAboutData }: { courseAboutData: CourseAboutData 
             value={detail.value}
           />
         ))}
+      {renderRequirements()}
       {courseAboutData.coursePrice && (
         <CourseAboutSidebarCoursePriceSlot coursePrice={courseAboutData.coursePrice} />
       )}

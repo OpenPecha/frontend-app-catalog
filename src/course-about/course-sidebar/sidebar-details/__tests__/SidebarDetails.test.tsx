@@ -10,17 +10,7 @@ describe('SidebarDetails', () => {
     ...overrides,
   });
 
-  describe('Course number', () => {
-    it('renders when provided', () => {
-      const courseData = createCourseData({ displayNumberWithDefault: 'CS101' });
-      render(<SidebarDetails courseAboutData={courseData} />);
-
-      expect(screen.getByText(messages.courseNumber.defaultMessage)).toBeInTheDocument();
-      expect(screen.getByText('CS101')).toBeInTheDocument();
-    });
-  });
-
-  describe('Start date', () => {
+  describe('Release date', () => {
     it('renders when startDateIsStillDefault is false', () => {
       const courseData = createCourseData({
         start: '2024-01-15T00:00:00Z',
@@ -28,7 +18,7 @@ describe('SidebarDetails', () => {
       });
       render(<SidebarDetails courseAboutData={courseData} />);
 
-      expect(screen.getByText(messages.classesStart.defaultMessage)).toBeInTheDocument();
+      expect(screen.getByText(messages.releaseDate.defaultMessage)).toBeInTheDocument();
       expect(screen.getByText(/Jan 15, 2024/)).toBeInTheDocument();
     });
 
@@ -39,7 +29,7 @@ describe('SidebarDetails', () => {
       });
       render(<SidebarDetails courseAboutData={courseData} />);
 
-      expect(screen.queryByText(messages.classesStart.defaultMessage)).not.toBeInTheDocument();
+      expect(screen.queryByText(messages.releaseDate.defaultMessage)).not.toBeInTheDocument();
     });
 
     it('uses advertisedStart when start is not available', () => {
@@ -50,17 +40,17 @@ describe('SidebarDetails', () => {
       });
       render(<SidebarDetails courseAboutData={courseData} />);
 
-      expect(screen.getByText(messages.classesStart.defaultMessage)).toBeInTheDocument();
+      expect(screen.getByText(messages.releaseDate.defaultMessage)).toBeInTheDocument();
       expect(screen.getByText(/Feb 1, 2024/)).toBeInTheDocument();
     });
   });
 
-  describe('End date', () => {
+  describe('Archive date', () => {
     it('renders when provided', () => {
       const courseData = createCourseData({ end: '2024-06-15T00:00:00Z' });
       render(<SidebarDetails courseAboutData={courseData} />);
 
-      expect(screen.getByText(messages.classesEnd.defaultMessage)).toBeInTheDocument();
+      expect(screen.getByText(messages.archiveDate.defaultMessage)).toBeInTheDocument();
       expect(screen.getByText(/Jun 15, 2024/)).toBeInTheDocument();
     });
 
@@ -68,7 +58,7 @@ describe('SidebarDetails', () => {
       const courseData = createCourseData({ end: null });
       render(<SidebarDetails courseAboutData={courseData} />);
 
-      expect(screen.queryByText(messages.classesEnd.defaultMessage)).not.toBeInTheDocument();
+      expect(screen.queryByText(messages.archiveDate.defaultMessage)).not.toBeInTheDocument();
     });
   });
 
@@ -91,7 +81,7 @@ describe('SidebarDetails', () => {
 
   describe('Requirements', () => {
     it('renders when provided', () => {
-      const courseData = createCourseData({ requirements: 'Basic programming knowledge' });
+      const courseData = createCourseData({ prerequisites: '<p>Basic programming knowledge</p>' });
       render(<SidebarDetails courseAboutData={courseData} />);
 
       expect(screen.getByText(messages.requirements.defaultMessage)).toBeInTheDocument();
@@ -99,7 +89,7 @@ describe('SidebarDetails', () => {
     });
 
     it('does not render when not provided', () => {
-      const courseData = createCourseData({ requirements: null });
+      const courseData = createCourseData({ prerequisites: null });
       render(<SidebarDetails courseAboutData={courseData} />);
 
       expect(screen.queryByText(messages.requirements.defaultMessage)).not.toBeInTheDocument();
@@ -204,12 +194,11 @@ describe('SidebarDetails', () => {
 
   it('renders all available details when all data is provided', () => {
     const courseData = createCourseData({
-      displayNumberWithDefault: 'CS101',
       effort: '5-10 hours per week',
       start: '2024-01-15T00:00:00Z',
       end: '2024-06-15T00:00:00Z',
       startDateIsStillDefault: false,
-      requirements: 'Basic programming knowledge',
+      prerequisites: '<p>Basic programming knowledge</p>',
       coursePrice: '$99',
       preRequisiteCourses: [{
         key: 'course-v1:TestX+CS100+2023',
@@ -218,16 +207,14 @@ describe('SidebarDetails', () => {
     });
     render(<SidebarDetails courseAboutData={courseData} />);
 
-    expect(screen.getByText(messages.courseNumber.defaultMessage)).toBeInTheDocument();
-    expect(screen.getByText(courseData.displayNumberWithDefault)).toBeInTheDocument();
-    expect(screen.getByText(messages.classesStart.defaultMessage)).toBeInTheDocument();
+    expect(screen.getByText(messages.releaseDate.defaultMessage)).toBeInTheDocument();
     expect(screen.getByText(/Jan 15, 2024/)).toBeInTheDocument();
-    expect(screen.getByText(messages.classesEnd.defaultMessage)).toBeInTheDocument();
+    expect(screen.getByText(messages.archiveDate.defaultMessage)).toBeInTheDocument();
     expect(screen.getByText(/Jun 15, 2024/)).toBeInTheDocument();
     expect(screen.getByText(messages.estimatedEffort.defaultMessage)).toBeInTheDocument();
     expect(screen.getByText(courseData.effort ?? '')).toBeInTheDocument();
     expect(screen.getByText(messages.requirements.defaultMessage)).toBeInTheDocument();
-    expect(screen.getByText(courseData.requirements)).toBeInTheDocument();
+    expect(screen.getByText('Basic programming knowledge')).toBeInTheDocument();
     expect(screen.getByText(messages.price.defaultMessage)).toBeInTheDocument();
     expect(screen.getByText(courseData.coursePrice)).toBeInTheDocument();
     expect(screen.getByText(messages.prerequisites.defaultMessage)).toBeInTheDocument();
@@ -235,24 +222,19 @@ describe('SidebarDetails', () => {
 
   it('handles minimal course data', () => {
     const courseData = createCourseData({
-      displayNumberWithDefault: 'MIN101',
       effort: null,
       start: null,
       end: null,
       startDateIsStillDefault: true,
-      requirements: null,
+      prerequisites: null,
       coursePrice: null,
       preRequisiteCourses: [],
     });
     render(<SidebarDetails courseAboutData={courseData} />);
 
-    // Only course number should be visible
-    expect(screen.getByText(messages.courseNumber.defaultMessage)).toBeInTheDocument();
-    expect(screen.getByText(courseData.displayNumberWithDefault)).toBeInTheDocument();
-
-    // Other fields should not be shown
-    expect(screen.queryByText(messages.classesStart.defaultMessage)).not.toBeInTheDocument();
-    expect(screen.queryByText(messages.classesEnd.defaultMessage)).not.toBeInTheDocument();
+    // No detail rows should be shown
+    expect(screen.queryByText(messages.releaseDate.defaultMessage)).not.toBeInTheDocument();
+    expect(screen.queryByText(messages.archiveDate.defaultMessage)).not.toBeInTheDocument();
     expect(screen.queryByText(messages.estimatedEffort.defaultMessage)).not.toBeInTheDocument();
     expect(screen.queryByText(messages.requirements.defaultMessage)).not.toBeInTheDocument();
     expect(screen.queryByText(messages.price.defaultMessage)).not.toBeInTheDocument();

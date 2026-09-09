@@ -23,40 +23,24 @@ describe('getSidebarDetails', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('returns all sidebar details with correct structure', () => {
+    mockIntl.formatDate.mockReturnValue('Jan 15, 2024');
+
     const courseData = createCourseData({
-      displayNumberWithDefault: 'CS101',
       effort: '5-10 hours per week',
       start: '2024-01-15T00:00:00Z',
       end: '2024-06-15T00:00:00Z',
       startDateIsStillDefault: false,
-      requirements: 'Basic programming knowledge',
+      duration: '6 weeks',
     });
 
     const result = getSidebarDetails(mockIntl, courseData);
 
     expect(result).toHaveLength(5);
     expect(result[0]).toEqual({
-      key: SIDEBAR_DETAIL_KEYS.COURSE_NUMBER,
+      key: SIDEBAR_DETAIL_KEYS.START_DATE,
       icon: expect.any(Function),
-      label: messages.courseNumber.defaultMessage,
-      value: courseData.displayNumberWithDefault,
-      show: true,
-    });
-  });
-
-  it('handles course number correctly', () => {
-    const courseData = createCourseData({
-      displayNumberWithDefault: 'MATH101',
-    });
-
-    const result = getSidebarDetails(mockIntl, courseData);
-    const courseNumberDetail = getDetailByKey(result, SIDEBAR_DETAIL_KEYS.COURSE_NUMBER);
-
-    expect(courseNumberDetail).toEqual({
-      key: SIDEBAR_DETAIL_KEYS.COURSE_NUMBER,
-      icon: expect.any(Function),
-      label: messages.courseNumber.defaultMessage,
-      value: courseData.displayNumberWithDefault,
+      label: messages.releaseDate.defaultMessage,
+      value: expect.any(String),
       show: true,
     });
   });
@@ -152,64 +136,71 @@ describe('getSidebarDetails', () => {
     expect(effortDetail?.show).toBe(false);
   });
 
-  it('handles requirements when provided', () => {
+  it('handles duration when provided', () => {
     const courseData = createCourseData({
-      requirements: 'Basic math knowledge',
+      duration: '8 weeks',
     });
 
     const result = getSidebarDetails(mockIntl, courseData);
-    const requirementsDetail = getDetailByKey(result, SIDEBAR_DETAIL_KEYS.REQUIREMENTS);
+    const durationDetail = getDetailByKey(result, SIDEBAR_DETAIL_KEYS.DURATION);
 
-    expect(requirementsDetail?.show).toBe(true);
-    expect(requirementsDetail?.value).toBe(courseData.requirements);
+    expect(durationDetail?.show).toBe(true);
+    expect(durationDetail?.value).toBe(courseData.duration);
   });
 
-  it('handles requirements when not provided', () => {
-    const courseData = createCourseData({ requirements: null });
+  it('handles duration when not provided', () => {
+    const courseData = createCourseData({ duration: null });
 
     const result = getSidebarDetails(mockIntl, courseData);
-    const requirementsDetail = result.find(detail => detail.key === SIDEBAR_DETAIL_KEYS.REQUIREMENTS);
+    const durationDetail = result.find(detail => detail.key === SIDEBAR_DETAIL_KEYS.DURATION);
 
-    expect(requirementsDetail?.show).toBe(false);
+    expect(durationDetail?.show).toBe(false);
   });
 
-  it('handles empty string requirements', () => {
-    const courseData = createCourseData({ requirements: '' });
+  it('handles empty string duration', () => {
+    const courseData = createCourseData({ duration: '' });
 
     const result = getSidebarDetails(mockIntl, courseData);
-    const requirementsDetail = result.find(detail => detail.key === SIDEBAR_DETAIL_KEYS.REQUIREMENTS);
+    const durationDetail = result.find(detail => detail.key === SIDEBAR_DETAIL_KEYS.DURATION);
 
-    expect(requirementsDetail?.show).toBe(false);
+    expect(durationDetail?.show).toBe(false);
+  });
+
+  it('shows students enrolled count', () => {
+    const courseData = createCourseData({ enrolledStudentsCount: 42 });
+
+    const result = getSidebarDetails(mockIntl, courseData);
+    const enrolledDetail = getDetailByKey(result, SIDEBAR_DETAIL_KEYS.STUDENTS_ENROLLED);
+
+    expect(enrolledDetail?.show).toBe(true);
+    expect(enrolledDetail?.value).toBe(42);
   });
 
   it('returns correct icons for each detail type', () => {
     const courseData = createCourseData();
     const result = getSidebarDetails(mockIntl, courseData);
 
-    Object.values(SIDEBAR_DETAIL_KEYS).forEach((key) => {
-      const detail = getDetailByKey(result, key);
-      expect(detail?.icon).toBeDefined();
+    result.forEach((detail) => {
+      expect(detail.icon).toBeDefined();
     });
   });
 
   it('handles edge case with all null values', () => {
     const courseData = createCourseData({
-      displayNumberWithDefault: 'TEST101',
       effort: null,
       start: null,
       end: null,
       startDateIsStillDefault: true,
-      requirements: null,
+      duration: null,
     });
 
     const result = getSidebarDetails(mockIntl, courseData);
     const get = (key: string) => getDetailByKey(result, key);
 
-    expect(get(SIDEBAR_DETAIL_KEYS.COURSE_NUMBER)?.show).toBe(true);
     expect(get(SIDEBAR_DETAIL_KEYS.START_DATE)?.show).toBe(false);
     expect(get(SIDEBAR_DETAIL_KEYS.END_DATE)?.show).toBe(false);
     expect(get(SIDEBAR_DETAIL_KEYS.EFFORT)?.show).toBe(false);
-    expect(get(SIDEBAR_DETAIL_KEYS.REQUIREMENTS)?.show).toBe(false);
+    expect(get(SIDEBAR_DETAIL_KEYS.DURATION)?.show).toBe(false);
   });
 
   it('handles empty string dates', () => {
@@ -233,13 +224,13 @@ describe('getSidebarDetails', () => {
   it('handles undefined values gracefully', () => {
     const courseData = createCourseData({
       effort: undefined,
-      requirements: undefined,
+      duration: undefined,
     });
 
     const result = getSidebarDetails(mockIntl, courseData);
     const get = (key: string) => getDetailByKey(result, key);
 
     expect(get(SIDEBAR_DETAIL_KEYS.EFFORT)?.show).toBe(false);
-    expect(get(SIDEBAR_DETAIL_KEYS.REQUIREMENTS)?.show).toBe(false);
+    expect(get(SIDEBAR_DETAIL_KEYS.DURATION)?.show).toBe(false);
   });
 });
