@@ -13,7 +13,7 @@ const InstructorItem = ({ instructor }: { instructor: Instructor }) => {
     name, title, organization, image, bio,
   } = instructor;
 
-  const titleOrg = [title, organization].filter(Boolean).join(' · ');
+  const titleOrg = [title, organization].filter(Boolean).join(' — ');
   const hasBio = hasVisibleHtmlContent(bio);
 
   return (
@@ -53,7 +53,7 @@ export const Instructors = ({ instructorInfo }: { instructorInfo: Instructor[] }
 
   return (
     <Container className="px-0">
-      <Card>
+      <Card className="course-about-instructors-card">
         <Card.Header title={<h2 className="my-0 h3">{intl.formatMessage(messages.instructorsHeading)}</h2>} />
         <Card.Section>
           <div className="course-about-instructors">

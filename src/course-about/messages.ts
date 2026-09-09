@@ -43,7 +43,7 @@ const messages = defineMessages({
   },
   courseShortDescriptionHeading: {
     id: 'catalog.course-about.course-short-description.heading',
-    defaultMessage: 'Course Summary',
+    defaultMessage: 'At a Glance',
     description: 'Heading for the short course description section.',
   },
 });

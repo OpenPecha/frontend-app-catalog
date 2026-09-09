@@ -77,13 +77,13 @@ const CourseAboutPage = () => {
         */}
         <div className="course-about-body">
           <div className="course-about-body__panel">
+            <CourseShortDescription shortDescription={courseAboutData.shortDescription} />
+            <CourseDescription description={courseAboutData.description} />
+            <CourseRequirements requirements={courseAboutData.requirements} />
             <CourseAboutOverviewSlot
               overviewData={courseAboutData.overview}
               courseId={courseId}
             />
-            <CourseShortDescription shortDescription={courseAboutData.shortDescription} />
-            <CourseDescription description={courseAboutData.description} />
-            <CourseRequirements requirements={courseAboutData.requirements} />
             <LearningOutcomes learningInfo={courseAboutData.learningInfo} />
           </div>
           <Instructors instructorInfo={courseAboutData.instructorInfo} />

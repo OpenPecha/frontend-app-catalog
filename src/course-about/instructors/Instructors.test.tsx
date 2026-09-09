@@ -15,7 +15,7 @@ describe('Instructors', () => {
   it('renders instructor name, title/org and bio', () => {
     render(<Instructors instructorInfo={[buildInstructor()]} />);
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
-    expect(screen.getByText('Professor · openedX University')).toBeInTheDocument();
+    expect(screen.getByText('Professor — openedX University')).toBeInTheDocument();
     expect(screen.getByText('Jane teaches things.')).toBeInTheDocument();
   });
 
@@ -29,7 +29,7 @@ describe('Instructors', () => {
 
   it('skips instructors without a name or bio', () => {
     render(<Instructors instructorInfo={[buildInstructor({ name: '', bio: '' })]} />);
-    expect(screen.queryByText('Professor · openedX University')).not.toBeInTheDocument();
+    expect(screen.queryByText('Professor — openedX University')).not.toBeInTheDocument();
   });
 
   it('skips an instructor whose name and bio are both blank markup', () => {
