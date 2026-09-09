@@ -13,6 +13,11 @@ describe('LearningOutcomes', () => {
     expect(screen.getAllByRole('listitem')).toHaveLength(1);
   });
 
+  it('filters out outcomes that are markup with no visible text', () => {
+    render(<LearningOutcomes learningInfo={['Real outcome', '<p><br></p>']} />);
+    expect(screen.getAllByRole('listitem')).toHaveLength(1);
+  });
+
   it('renders nothing when there are no outcomes', () => {
     const { container } = render(<LearningOutcomes learningInfo={[]} />);
     expect(container.firstChild).toBeNull();

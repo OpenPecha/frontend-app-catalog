@@ -29,4 +29,9 @@ describe('CourseDescription', () => {
     const { container } = render(<CourseDescription description={null} />);
     expect(container.firstChild).toBeNull();
   });
+
+  it('renders nothing when description is markup with no visible text', () => {
+    const { container } = render(<CourseDescription description="<p><br></p>" />);
+    expect(container.firstChild).toBeNull();
+  });
 });

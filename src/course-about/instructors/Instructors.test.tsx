@@ -32,6 +32,19 @@ describe('Instructors', () => {
     expect(screen.queryByText('Professor · openedX University')).not.toBeInTheDocument();
   });
 
+  it('skips an instructor whose name and bio are both blank markup', () => {
+    const { container } = render(
+      <Instructors instructorInfo={[buildInstructor({ name: '   ', bio: '<p><br></p>' })]} />,
+    );
+    expect(container.firstChild).toBeNull();
+  });
+
+  it('keeps an instructor with a name but omits an empty-markup bio', () => {
+    render(<Instructors instructorInfo={[buildInstructor({ bio: '<p></p>' })]} />);
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+    expect(document.querySelector('.course-about-instructor__bio')).not.toBeInTheDocument();
+  });
+
   it('renders nothing when there are no instructors', () => {
     const { container } = render(<Instructors instructorInfo={[]} />);
     expect(container.firstChild).toBeNull();

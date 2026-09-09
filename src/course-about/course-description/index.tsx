@@ -4,13 +4,14 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 
 import { processOverviewContent } from '@src/course-about/course-overview/utils';
 import messages from '../messages';
+import { hasVisibleHtmlContent } from '../utils';
 
 export const CourseDescription = ({ description }: { description: string | null }) => {
   const intl = useIntl();
 
   const processedDescription = processOverviewContent(description || '', getConfig().LMS_BASE_URL);
 
-  if (!processedDescription.trim()) {
+  if (!hasVisibleHtmlContent(processedDescription)) {
     return null;
   }
 

@@ -2,11 +2,12 @@ import { Container, Card } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from '../messages';
+import { hasVisibleHtmlContent } from '../utils';
 
 export const CourseRequirements = ({ requirements }: { requirements: string | null }) => {
   const intl = useIntl();
 
-  if (!requirements || !requirements.trim()) {
+  if (!hasVisibleHtmlContent(requirements)) {
     return null;
   }
 
@@ -17,7 +18,7 @@ export const CourseRequirements = ({ requirements }: { requirements: string | nu
         <Card.Section>
           {
             /* eslint-disable-next-line react/no-danger */
-            <div className="course-about-requirements" dangerouslySetInnerHTML={{ __html: requirements }} />
+            <div className="course-about-requirements" dangerouslySetInnerHTML={{ __html: requirements as string }} />
           }
         </Card.Section>
       </Card>

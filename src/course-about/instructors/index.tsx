@@ -4,6 +4,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 
 import type { Instructor } from '../types';
 import messages from '../messages';
+import { hasVisibleHtmlContent } from '../utils';
 
 const InstructorItem = ({ instructor }: { instructor: Instructor }) => {
   const intl = useIntl();
@@ -13,6 +14,7 @@ const InstructorItem = ({ instructor }: { instructor: Instructor }) => {
   } = instructor;
 
   const titleOrg = [title, organization].filter(Boolean).join(' · ');
+  const hasBio = hasVisibleHtmlContent(bio);
 
   return (
     <div className="course-about-instructor">
@@ -30,9 +32,9 @@ const InstructorItem = ({ instructor }: { instructor: Instructor }) => {
           {titleOrg && <p className="course-about-instructor__title">{titleOrg}</p>}
         </div>
       </div>
-      {bio && (
+      {hasBio && (
         /* eslint-disable-next-line react/no-danger */
-        <div className="course-about-instructor__bio" dangerouslySetInnerHTML={{ __html: bio }} />
+        <div className="course-about-instructor__bio" dangerouslySetInnerHTML={{ __html: bio as string }} />
       )}
     </div>
   );
@@ -42,7 +44,7 @@ export const Instructors = ({ instructorInfo }: { instructorInfo: Instructor[] }
   const intl = useIntl();
 
   const instructors = (instructorInfo || []).filter(
-    instructor => instructor && (instructor.name || instructor.bio),
+    instructor => instructor && (!!instructor.name?.trim() || hasVisibleHtmlContent(instructor.bio)),
   );
 
   if (!instructors.length) {

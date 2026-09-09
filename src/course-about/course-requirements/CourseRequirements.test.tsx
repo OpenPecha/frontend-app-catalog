@@ -16,4 +16,9 @@ describe('CourseRequirements', () => {
     const { container } = render(<CourseRequirements requirements={null} />);
     expect(container.firstChild).toBeNull();
   });
+
+  it('renders nothing when requirements is markup with no visible text', () => {
+    const { container } = render(<CourseRequirements requirements="<p></p>" />);
+    expect(container.firstChild).toBeNull();
+  });
 });

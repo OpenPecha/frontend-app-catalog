@@ -1,10 +1,22 @@
+import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+
 import { render, screen, within } from '@src/setupTest';
 import { mockCourseAboutResponse } from '@src/__mocks__';
 import { ROUTES } from '@src/routes';
 import SidebarDetails from '../SidebarDetails';
 import messages from '../messages';
 
+jest.mock('@edx/frontend-platform/auth', () => ({
+  getAuthenticatedUser: jest.fn(),
+}));
+
 describe('SidebarDetails', () => {
+  beforeEach(() => {
+    // Not under test here — StudioLink (rendered at the bottom of every
+    // SidebarDetails) has its own dedicated test suite.
+    (getAuthenticatedUser as jest.Mock).mockReturnValue(null);
+  });
+
   const createCourseData = (overrides = {}) => ({
     ...mockCourseAboutResponse,
     ...overrides,
@@ -93,6 +105,22 @@ describe('SidebarDetails', () => {
       render(<SidebarDetails courseAboutData={courseData} />);
 
       expect(screen.queryByText(messages.price.defaultMessage)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('About sidebar HTML', () => {
+    it('renders when provided', () => {
+      const courseData = createCourseData({ aboutSidebarHtml: '<p>Extra sidebar content</p>' });
+      render(<SidebarDetails courseAboutData={courseData} />);
+
+      expect(screen.getByText('Extra sidebar content')).toBeInTheDocument();
+    });
+
+    it('does not render when it is markup with no visible text', () => {
+      const courseData = createCourseData({ aboutSidebarHtml: '<p><br></p>' });
+      const { container } = render(<SidebarDetails courseAboutData={courseData} />);
+
+      expect(container.querySelector('.course-about-sidebar-html')).not.toBeInTheDocument();
     });
   });
 

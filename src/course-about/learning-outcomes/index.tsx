@@ -2,11 +2,12 @@ import { Container, Card } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import messages from '../messages';
+import { hasVisibleHtmlContent } from '../utils';
 
 export const LearningOutcomes = ({ learningInfo }: { learningInfo: string[] }) => {
   const intl = useIntl();
 
-  const outcomes = (learningInfo || []).filter(outcome => outcome && outcome.trim());
+  const outcomes = (learningInfo || []).filter(hasVisibleHtmlContent);
 
   if (!outcomes.length) {
     return null;
