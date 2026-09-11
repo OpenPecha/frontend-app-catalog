@@ -160,4 +160,4 @@ export type CourseMediaPartial = {
   courseVideo?: CourseVideo;
 };
 
-export type EnrollmentPartial = Pick<Enrollment, 'isActive'>;
+export type EnrollmentPartial = Pick<Enrollment, 'isActive' | 'mode'>;

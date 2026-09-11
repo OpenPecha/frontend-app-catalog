@@ -39,6 +39,15 @@ jest.mock('@openedx/paragon', () => ({
   useMediaQuery: jest.fn(),
 }));
 
+// WishlistButton (rendered for any authenticated visitor to an open or
+// invite-only course, including the global-staff user below) fetches its own
+// status independently of anything else under test in this integration suite.
+jest.mock('./course-intro/wishlist/api', () => ({
+  getWishlistStatus: jest.fn(() => Promise.resolve(false)),
+  addToWishlist: jest.fn(),
+  removeFromWishlist: jest.fn(),
+}));
+
 const mockUseMediaQuery = useMediaQuery as jest.Mock;
 const mockGetConfig = getConfig as jest.Mock;
 const mockFetchCourseAboutData = fetchCourseAboutData as jest.Mock;

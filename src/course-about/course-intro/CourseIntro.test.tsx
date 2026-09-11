@@ -21,6 +21,15 @@ jest.mock('@src/course-about/data/hooks', () => ({
   useEnrollment: jest.fn(),
 }));
 
+// WishlistButton (rendered alongside Enroll now for an authenticated,
+// eligible visitor) fetches its own status independently of anything else
+// under test here.
+jest.mock('./wishlist/api', () => ({
+  getWishlistStatus: jest.fn(() => Promise.resolve(false)),
+  addToWishlist: jest.fn(),
+  removeFromWishlist: jest.fn(),
+}));
+
 describe('CourseIntro', () => {
   const mockEnrollAndRedirect = jest.fn();
 
@@ -64,7 +73,7 @@ describe('CourseIntro', () => {
     (getAuthenticatedUser as jest.Mock).mockReturnValue({ username: 'testuser' });
     const enrolledCourseData = {
       ...mockCourseAboutResponse,
-      enrollment: { isActive: true },
+      enrollment: { isActive: true, mode: 'audit' },
     };
 
     render(<CourseIntro courseAboutData={enrolledCourseData} />);
